@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.filemanagerapp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_logo"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.FileManagerApp">
+        <activity android:name=".Activity.AudioPlayerActivity"></activity>
+        <activity android:name=".Activity.DocumentsFileActivity" />
+        <activity android:name=".Activity.DocumentsFolderActivity" />
+        <activity android:name=".Activity.AudioFolderActivity" />
+        <activity android:name=".Activity.ImageFilesActivity" />
+        <activity android:name=".Activity.ImageFolderActivity" />
+        <activity android:name=".Activity.VideoPlayerActivity" />
+        <activity android:name=".Activity.VideoFilesActivity" />
+        <activity android:name=".Activity.VideoFolderActivity" />
+        <activity android:name=".Activity.ImagePlayerActivity" />
+        <activity android:name=".Activity.AudioFilesActivity" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

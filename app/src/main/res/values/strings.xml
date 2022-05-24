@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">FileManagerApp</string>
+    <string name="nav_language">Language</string>
+    <string name="nav_rateus">Rate us</string>
+    <string name="nav_moreapp">More app (Ad)</string>
+    <string name="nav_feedback">Feedback</string>
+    <string name="nav_sharaapp">Share app</string>
+    <string name="nav_privaci">Privaci Policy</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+</resources>

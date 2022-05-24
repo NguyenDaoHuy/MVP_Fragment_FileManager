@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+           <item android:id="@+id/nav_language"
+               android:title="@string/nav_language"
+               android:icon="@drawable/ic_language"/>
+    <item android:id="@+id/nav_rate"
+        android:title="@string/nav_rateus"
+        android:icon="@drawable/ic_rateus"/>
+    <item android:id="@+id/nav_more"
+        android:title="@string/nav_moreapp"
+        android:icon="@drawable/ic_more_app"/>
+    <item android:id="@+id/nav_feedback"
+        android:title="@string/nav_feedback"
+        android:icon="@drawable/ic_feedback"/>
+    <item android:id="@+id/nav_share"
+        android:title="@string/nav_sharaapp"
+        android:icon="@drawable/ic_share"/>
+    <item android:id="@+id/nav_privacy"
+        android:title="@string/nav_privaci"
+        android:icon="@drawable/ic_protected"/>
+</menu>

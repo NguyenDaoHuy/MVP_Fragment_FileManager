@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    android:id="@+id/item_image"
+    android:background="?attr/selectableItemBackground">
+      <ImageView
+          android:layout_width="130dp"
+          android:layout_height="match_parent"
+          android:id="@+id/imgAnh"/>
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:layout_marginLeft="140dp"
+          android:id="@+id/tenAnh"
+          android:textColor="#121111"
+          android:layout_marginRight="40dp"
+          android:maxLines="1"
+          android:ellipsize="end"
+          />
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentBottom="true"
+          android:layout_marginBottom="30dp"
+          android:layout_marginLeft="140dp"
+          android:id="@+id/sizeAnh"
+          android:textSize="12dp"
+          android:textColor="#4E4C4C"
+          android:layout_marginRight="40dp"
+          />
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/ic_bacham"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:layout_marginRight="5dp"
+          android:id="@+id/btnMenu"
+          android:background="?attr/selectableItemBackgroundBorderless"/>
+</RelativeLayout>
