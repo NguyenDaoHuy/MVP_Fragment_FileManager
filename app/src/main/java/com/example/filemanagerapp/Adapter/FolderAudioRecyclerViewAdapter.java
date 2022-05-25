@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.filemanagerapp.Activity.AudioFilesActivity;
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
-
 import java.util.ArrayList;
 
 public class FolderAudioRecyclerViewAdapter  extends RecyclerView.Adapter<FolderAudioRecyclerViewAdapter.ViewHolder> {
@@ -56,7 +55,7 @@ public class FolderAudioRecyclerViewAdapter  extends RecyclerView.Adapter<Folder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView folderName,folderPath,folderFiles;
+        private TextView folderName,folderPath,folderFiles;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             folderName = itemView.findViewById(R.id.folderName);

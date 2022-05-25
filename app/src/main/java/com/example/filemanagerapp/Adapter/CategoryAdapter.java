@@ -7,12 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.filemanagerapp.Activity.AudioFolderActivity;
-import com.example.filemanagerapp.Activity.DocumentsFolderActivity;
+import com.example.filemanagerapp.Activity.DocumentsFileActivity;
 import com.example.filemanagerapp.Activity.ImageFolderActivity;
 import com.example.filemanagerapp.Activity.VideoFolderActivity;
 import com.example.filemanagerapp.Model.Category;
@@ -76,7 +74,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                             Intent intent = new Intent(context, VideoFolderActivity.class);
                             context.startActivity(intent);
                         }else if(id == 4){
-                            Intent intent = new Intent(context, DocumentsFolderActivity.class);
+                            Intent intent = new Intent(context, DocumentsFileActivity.class);
                             context.startActivity(intent);
                         }else if(id == 5){
 

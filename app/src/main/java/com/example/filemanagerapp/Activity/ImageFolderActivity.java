@@ -3,7 +3,6 @@ package com.example.filemanagerapp.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,7 +12,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.widget.TextView;
-
 import com.example.filemanagerapp.Adapter.FolderImageRecyclerViewAdapter;
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;

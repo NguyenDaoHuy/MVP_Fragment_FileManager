@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
 import com.google.android.exoplayer2.C;

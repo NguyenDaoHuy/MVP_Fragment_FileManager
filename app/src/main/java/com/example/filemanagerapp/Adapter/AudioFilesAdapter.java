@@ -2,19 +2,14 @@ package com.example.filemanagerapp.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.filemanagerapp.Activity.AudioPlayerActivity;
 import com.example.filemanagerapp.Activity.MyMediaPlayer;
-import com.example.filemanagerapp.Activity.VideoPlayerActivity;
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
 import java.util.ArrayList;
@@ -70,7 +65,7 @@ public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView audioName,audio_size,tvTimeAudio;
+        private TextView audioName,audio_size,tvTimeAudio;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             audioName = itemView.findViewById(R.id.audioName);

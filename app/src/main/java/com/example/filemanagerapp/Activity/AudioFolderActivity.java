@@ -13,13 +13,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.widget.TextView;
-
 import com.example.filemanagerapp.Adapter.FolderAudioRecyclerViewAdapter;
-import com.example.filemanagerapp.Adapter.FolderVideoRecyclerViewAdapter;
-import com.example.filemanagerapp.Adapter.VideoFoldersAdapter;
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
-
 import java.util.ArrayList;
 
 public class AudioFolderActivity extends AppCompatActivity {

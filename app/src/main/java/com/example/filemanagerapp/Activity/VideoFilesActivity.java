@@ -3,16 +3,13 @@ package com.example.filemanagerapp.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-
 import com.example.filemanagerapp.Adapter.VideoFilesAdapter;
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
-
 import java.util.ArrayList;
 
 public class VideoFilesActivity extends AppCompatActivity {

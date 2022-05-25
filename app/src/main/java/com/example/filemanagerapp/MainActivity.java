@@ -81,18 +81,11 @@ public class MainActivity extends AppCompatActivity {
         return size;
     }
     private void applyForPermission() {
-    /*    if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    999);
-        } */
         if(ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(MainActivity.this,"OK",Toast.LENGTH_SHORT).show();
         }else{
             ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},STORAGE_PERMISSION);
+                    new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE },STORAGE_PERMISSION);
         }
     }
 
@@ -138,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(MainActivity.this,"OK",Toast.LENGTH_SHORT).show();
         }
     }
 }

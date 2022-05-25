@@ -1,17 +1,14 @@
 package com.example.filemanagerapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.ListView;
-
 import com.example.filemanagerapp.Adapter.ImagesAdapter;
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
-
 import java.util.ArrayList;
 
 public class ImageFilesActivity extends AppCompatActivity {

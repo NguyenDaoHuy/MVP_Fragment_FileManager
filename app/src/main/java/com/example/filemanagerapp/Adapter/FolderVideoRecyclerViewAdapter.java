@@ -58,7 +58,7 @@ public class FolderVideoRecyclerViewAdapter extends RecyclerView.Adapter<FolderV
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView folderName,folderPath,folderFiles;
+        private TextView folderName,folderPath,folderFiles;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
              folderName = itemView.findViewById(R.id.folderName);

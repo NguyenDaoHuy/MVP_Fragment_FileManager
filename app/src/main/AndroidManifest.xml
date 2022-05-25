@@ -17,7 +17,6 @@
         android:theme="@style/Theme.FileManagerApp">
         <activity android:name=".Activity.AudioPlayerActivity"></activity>
         <activity android:name=".Activity.DocumentsFileActivity" />
-        <activity android:name=".Activity.DocumentsFolderActivity" />
         <activity android:name=".Activity.AudioFolderActivity" />
         <activity android:name=".Activity.ImageFilesActivity" />
         <activity android:name=".Activity.ImageFolderActivity" />
@@ -33,6 +32,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:grantUriPermissions="true"
+            android:authorities="com.example.mayzom"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
     </application>
 
 </manifest>

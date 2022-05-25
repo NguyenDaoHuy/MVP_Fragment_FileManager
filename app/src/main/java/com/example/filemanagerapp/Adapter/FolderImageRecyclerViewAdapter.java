@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.filemanagerapp.Activity.ImageFilesActivity;
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
@@ -56,7 +55,7 @@ public class FolderImageRecyclerViewAdapter extends RecyclerView.Adapter<FolderI
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView folderName,folderPath,folderFiles;
+        private TextView folderName,folderPath,folderFiles;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             folderName = itemView.findViewById(R.id.folderName);
