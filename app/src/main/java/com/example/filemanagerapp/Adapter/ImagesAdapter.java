@@ -22,22 +22,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ImagesAdapter extends BaseAdapter {
-    private Context context;
-    private ArrayList<FileItem> ds = new ArrayList<>();
+    ImageFilesInterface imageFilesInterface;
     private BottomSheetDialog bottomSheetDialog;
 
-    public ImagesAdapter(Context context, ArrayList<FileItem> ds){
-        this.context = context;
-        this.ds = ds;
+    public ImagesAdapter(ImageFilesInterface imageFilesInterface) {
+        this.imageFilesInterface = imageFilesInterface;
     }
+
     @Override
     public int getCount() {
-        return ds.size();
+        return imageFilesInterface.getCount();
     }
 
     @Override
     public Object getItem(int position) {
-        return ds.get(position);
+        return imageFilesInterface.image(position);
     }
 
     @Override
@@ -54,18 +53,18 @@ public class ImagesAdapter extends BaseAdapter {
         ImageView imgAnh =view.findViewById(R.id.imgAnh);
         TextView tenAnh = view.findViewById(R.id.tenAnh);
         TextView sizeAnh = view.findViewById(R.id.sizeAnh);
-        FileItem file = ds.get(position);
+        FileItem file = imageFilesInterface.image(position);
         imgAnh.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
         tenAnh.setText(file.getDisplayName());
         String size = file.getSize();
-        sizeAnh.setText(android.text.format.Formatter.formatFileSize(context,
+        sizeAnh.setText(android.text.format.Formatter.formatFileSize(parent.getContext(),
                 Long.parseLong(size)));
 
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 bottomSheetDialog = new BottomSheetDialog(context,R.style.BottomSheetTheme);
-                 View bsView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_layout,
+                 bottomSheetDialog = new BottomSheetDialog(parent.getContext(),R.style.BottomSheetTheme);
+                 View bsView = LayoutInflater.from(parent.getContext()).inflate(R.layout.bottom_sheet_layout,
                          v.findViewById(R.id.bottom_sheet));
                  bsView.findViewById(R.id.bs_language).setOnClickListener(new View.OnClickListener() {
                      @Override
@@ -81,15 +80,13 @@ public class ImagesAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ImagePlayerActivity.class);
-                intent.putExtra("anh", (Serializable) ds.get(position));
-                context.startActivity(intent);
+                imageFilesInterface.onClickItem(position);
             }
         });
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(context,v);
+                PopupMenu popupMenu = new PopupMenu(parent.getContext(),v);
                 popupMenu.getMenu().add("OPEN");
                 popupMenu.getMenu().add("DELETE");
                 popupMenu.getMenu().add("DETAIL");
@@ -98,21 +95,22 @@ public class ImagesAdapter extends BaseAdapter {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if(item.getTitle().equals("OPEN")){
-                            Intent intent = new Intent(context, ImagePlayerActivity.class);
-                            intent.putExtra("anh", (Serializable) ds.get(position));
-                            context.startActivity(intent);
+                            Intent intent = new Intent(parent.getContext(), ImagePlayerActivity.class);
+                            intent.putExtra("anh", (Serializable) imageFilesInterface.image(position));
+                            parent.getContext().startActivity(intent);
                         }
                         if(item.getTitle().equals("DELETE")){
-                         
+
                         }
                         if(item.getTitle().equals("DETAIL")){
-                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
                             builder.setTitle("Information");
-                            FileItem file = ds.get(position);
+                            FileItem file = imageFilesInterface.image(position);
+                            long longTime = Long.parseLong(file.getDateAdded()) * 1000;
                             builder.setMessage("Name :" + file.getDisplayName() +
-                                    "\nSize :" + android.text.format.Formatter.formatFileSize(context,
+                                    "\nSize :" + android.text.format.Formatter.formatFileSize(parent.getContext(),
                                     Long.parseLong(size)) +
-                                    "\nDate :" + file.getDateAdded());
+                                    "\nDate :" + VideoFilesAdapter.convertEpouch(longTime));
                             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -129,7 +127,7 @@ public class ImagesAdapter extends BaseAdapter {
                             String sub = "http://play.google.com";
                             intent.putExtra(Intent.EXTRA_TEXT,body);
                             intent.putExtra(Intent.EXTRA_TEXT,sub);
-                            context.startActivity(Intent.createChooser(intent,"Share using "));
+                            parent.getContext().startActivity(Intent.createChooser(intent,"Share using "));
                         }
                         return true;
                     }
@@ -140,5 +138,11 @@ public class ImagesAdapter extends BaseAdapter {
         });
         return view;
     }
-
+    public interface ImageFilesInterface{
+        int getCount();
+        FileItem image (int position);
+        void onClickItem(int position);
+        void onLongClickItem(int position);
+        void onClickMenu(int position);
+    }
 }

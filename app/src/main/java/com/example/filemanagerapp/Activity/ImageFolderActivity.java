@@ -12,18 +12,18 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.widget.TextView;
-import com.example.filemanagerapp.Adapter.FolderImageRecyclerViewAdapter;
+import com.example.filemanagerapp.Adapter.FolderRecyclerViewAdapter;
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
 
 import java.util.ArrayList;
 
-public class ImageFolderActivity extends AppCompatActivity {
+public class ImageFolderActivity extends AppCompatActivity implements FolderRecyclerViewAdapter.FolderInterface {
     private RecyclerView recyclerView;
     private TextView tvThongBaoImage;
     private ArrayList<FileItem> fileItems = new ArrayList<>();
     private ArrayList<String> allFolderList = new ArrayList<>();
-    private FolderImageRecyclerViewAdapter adapter;
+    private FolderRecyclerViewAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +43,7 @@ public class ImageFolderActivity extends AppCompatActivity {
         if(fileItems.size() == 0){
             tvThongBaoImage.setText("Không có dữ liệu");
         }
-        adapter = new FolderImageRecyclerViewAdapter(ImageFolderActivity.this, fileItems,allFolderList);
+        adapter = new FolderRecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(ImageFolderActivity.this,RecyclerView.VERTICAL,false));
         adapter.notifyDataSetChanged();
@@ -73,5 +73,31 @@ public class ImageFolderActivity extends AppCompatActivity {
             }while (cursor.moveToNext());
         }
         return fileItemArrayList;
+    }
+
+    @Override
+    public int getCount() {
+        if(allFolderList==null || allFolderList.size()<0){
+            return 0;
+        }
+        return allFolderList.size();
+    }
+
+    @Override
+    public String file(int position) {
+        return allFolderList.get(position);
+    }
+
+    @Override
+    public void onClickItem(int position) {
+        int indexPath = allFolderList.get(position).lastIndexOf("/");
+        String nameOFFolder = allFolderList.get(position).substring(indexPath+1);
+        Intent intent = new Intent(this, ImageFilesActivity.class);
+        intent.putExtra("folderName",nameOFFolder);
+        startActivity(intent);
+    }
+
+    public int getImageFolderSize(){
+        return allFolderList.size();
     }
 }

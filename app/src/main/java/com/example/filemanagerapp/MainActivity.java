@@ -23,12 +23,18 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.Toast;
 
+import com.example.filemanagerapp.Activity.AudioFolderActivity;
+import com.example.filemanagerapp.Activity.DocumentsFileActivity;
+import com.example.filemanagerapp.Activity.ImageFolderActivity;
+import com.example.filemanagerapp.Activity.ListAppActivity;
+import com.example.filemanagerapp.Activity.NewFilesActivity;
+import com.example.filemanagerapp.Activity.VideoFolderActivity;
 import com.example.filemanagerapp.Adapter.CategoryAdapter;
 import com.example.filemanagerapp.Model.Category;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CategoryAdapter.CategoryInterFace {
     public static final int STORAGE_PERMISSION = 1;
     public static final int REQUEST_PERMISSION_SETTINGS = 12;
     private RecyclerView rvDanhMuc;
@@ -70,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         categoryArrayList.add(new Category(7,"Cloud",R.drawable.icons_cloud,120));
         categoryArrayList.add(new Category(8,"Remote",R.drawable.icons8_remote,120));
         categoryArrayList.add(new Category(9,"Access from device",R.drawable.icons_remote,120));
-        CategoryAdapter categoryAdapter = new CategoryAdapter(categoryArrayList,MainActivity.this);
+        CategoryAdapter categoryAdapter = new CategoryAdapter(this);
         RecyclerView.LayoutManager layoutManager =new GridLayoutManager(getApplicationContext(),3,RecyclerView.VERTICAL,false);
         rvDanhMuc.setLayoutManager(layoutManager);
         rvDanhMuc.setAdapter(categoryAdapter);
@@ -131,6 +137,50 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+        }
+    }
+
+    @Override
+    public int getCount() {
+        if(categoryArrayList==null || categoryArrayList.size()<0){
+            return 0;
+        }
+        return categoryArrayList.size();
+    }
+
+    @Override
+    public Category category(int position) {
+        return categoryArrayList.get(position);
+    }
+
+    @Override
+    public void onClickItem(int position) {
+        Category category = categoryArrayList.get(position);
+        int id = category.getId();
+        if(id == 1){
+            Intent intent = new Intent(this, ImageFolderActivity.class);
+            this.startActivity(intent);
+        }else if(id == 2){
+            Intent intent = new Intent(this, AudioFolderActivity.class);
+            this.startActivity(intent);
+        }else if(id == 3){
+            Intent intent = new Intent(this, VideoFolderActivity.class);
+            this.startActivity(intent);
+        }else if(id == 4){
+            Intent intent = new Intent(this, DocumentsFileActivity.class);
+            this.startActivity(intent);
+        }else if(id == 5){
+            Intent intent = new Intent(this, ListAppActivity.class);
+            this.startActivity(intent);
+        }else if(id == 6){
+            Intent intent = new Intent(this, NewFilesActivity.class);
+            this.startActivity(intent);
+        }else if(id == 7){
+
+        }else if(id == 8){
+
+        }else if(id == 9){
+
         }
     }
 }

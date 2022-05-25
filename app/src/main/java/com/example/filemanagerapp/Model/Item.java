@@ -1,6 +1,8 @@
 package com.example.filemanagerapp.Model;
 
-public class Item {
+import java.io.Serializable;
+
+public class Item implements Serializable {
     private String name;
     private String path;
     public Item(){

@@ -16,52 +16,38 @@ import java.util.ArrayList;
 
 public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.ViewHolder> {
 
-    private ArrayList<FileItem> fileItemArrayList;
-    private Context context;
+    AudioFileInterface audioFileInterface;
 
-    public AudioFilesAdapter(ArrayList<FileItem> fileItemArrayList, Context context) {
-        this.fileItemArrayList = fileItemArrayList;
-        this.context = context;
+    public AudioFilesAdapter(AudioFileInterface audioFileInterface) {
+        this.audioFileInterface = audioFileInterface;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.audio_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.audio_item,parent,false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        FileItem v = fileItemArrayList.get(position);
+        FileItem v = audioFileInterface.audio(position);
         holder.audioName.setText(v.getDisplayName());
         String size = v.getSize();
-        holder.audio_size.setText(android.text.format.Formatter.formatFileSize(context,
+        holder.audio_size.setText(android.text.format.Formatter.formatFileSize(audioFileInterface.context(),
                 Long.parseLong(size)));
         holder.tvTimeAudio.setText(AudioPlayerActivity.convertToMMSS(v.getDuration()));
-
-    /*    if(MyMediaPlayer.currentIndex==position){
-            holder.audioName.setTextColor(Color.parseColor("#FF0000"));
-        }else {
-            holder.audioName.setTextColor(Color.parseColor("#000000"));
-        }  */
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyMediaPlayer.getInstance().reset();
-                MyMediaPlayer.currentIndex = position;
-                Intent intent = new Intent(context, AudioPlayerActivity.class);
-                intent.putExtra("LIST",fileItemArrayList);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                audioFileInterface.onClickItem(position);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return fileItemArrayList.size();
+        return audioFileInterface.getCount();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -72,5 +58,12 @@ public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.Vi
             audio_size = itemView.findViewById(R.id.audio_size);
             tvTimeAudio = itemView.findViewById(R.id.tvTimeAudio);
         }
+    }
+
+    public interface AudioFileInterface{
+        int getCount();
+        FileItem audio (int position);
+        void onClickItem(int position);
+        Context context();
     }
 }

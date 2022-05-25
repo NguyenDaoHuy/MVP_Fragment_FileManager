@@ -6,41 +6,40 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.widget.Toast;
-
 import com.example.filemanagerapp.Adapter.DocumentsFilesAdapter;
 import com.example.filemanagerapp.Model.Item;
 import com.example.filemanagerapp.R;
 import java.io.File;
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
-public class DocumentsFileActivity extends AppCompatActivity implements DocumentsFilesAdapter.DocumentFileInterface {
-
+public class NewFilesActivity extends AppCompatActivity implements DocumentsFilesAdapter.DocumentFileInterface {
+    private RecyclerView recyclerView;
     private ArrayList<Item> itemArrayList = new ArrayList<>();
     private File dir;
     private DocumentsFilesAdapter adapter;
-    private RecyclerView recyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_documents_file);
-        recyclerView = findViewById(R.id.rvDocuments);
+        setContentView(R.layout.activity_new_files);
+        recyclerView = findViewById(R.id.rvNewFile);
         dir = new File(String.valueOf(android.os.Environment.getExternalStorageDirectory()));
         walkdir(dir);
-        showDocuments();
-    }
-    private void showDocuments(){
         adapter = new DocumentsFilesAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
         adapter.notifyDataSetChanged();
     }
-
     public void walkdir(File dir) {
+        int monthNow = Calendar.getInstance().get(Calendar.MONTH) +1;
+        int yearNow = Calendar.getInstance().get(Calendar.YEAR);
         File listFile[] = dir.listFiles();
         try{
             if (listFile.length > 0) {
@@ -48,16 +47,21 @@ public class DocumentsFileActivity extends AppCompatActivity implements Document
                     if (listFile[i].isDirectory() == true) {
                         walkdir(listFile[i]);
                     }else{
+                            Date date = new Date(listFile[i].lastModified());
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTime(date);
+                            int month = cal.get(Calendar.MONTH) +1;
+                            int year = cal.get(Calendar.YEAR);
+                            String name = listFile[i].getName();
+                            String path = listFile[i].getPath();
                         if (listFile[i].getName().endsWith(".docx") ||
                                 listFile[i].getName().endsWith(".pdf") ||
                                 listFile[i].getName().endsWith(".txt") ||
                                 listFile[i].getName().endsWith(".pptx") ||
                                 listFile[i].getName().endsWith(".xls")) {
-                            String date = new Date(listFile[i].lastModified()).toString();
-                            String name = listFile[i].getName();
-                            String path = listFile[i].getPath();
-                            itemArrayList.add(new Item(name,path));
-                            System.out.println(date);
+                            if(month == monthNow && year == yearNow){
+                                itemArrayList.add(new Item(name,path));
+                            }
                         }
                     }
                 }

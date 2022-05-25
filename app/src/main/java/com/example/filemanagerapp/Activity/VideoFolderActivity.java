@@ -13,19 +13,20 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.widget.TextView;
-import com.example.filemanagerapp.Adapter.FolderVideoRecyclerViewAdapter;
+
+import com.example.filemanagerapp.Adapter.FolderRecyclerViewAdapter;
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
 
 import java.util.ArrayList;
 
-public class VideoFolderActivity extends AppCompatActivity {
+public class VideoFolderActivity extends AppCompatActivity implements FolderRecyclerViewAdapter.FolderInterface {
 
     private RecyclerView recyclerView;
     private TextView tvThongBao;
     private ArrayList<FileItem> fileItems = new ArrayList<>();
     private ArrayList<String> allFolderList = new ArrayList<>();
-    private FolderVideoRecyclerViewAdapter adapter;
+    private FolderRecyclerViewAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +47,7 @@ public class VideoFolderActivity extends AppCompatActivity {
           if(fileItems.size() == 0){
               tvThongBao.setText("Không có dữ liệu");
           }
-          adapter = new FolderVideoRecyclerViewAdapter(VideoFolderActivity.this, fileItems,allFolderList);
+          adapter = new FolderRecyclerViewAdapter(this);
           recyclerView.setAdapter(adapter);
           recyclerView.setLayoutManager(new LinearLayoutManager(VideoFolderActivity.this,RecyclerView.VERTICAL,false));
           adapter.notifyDataSetChanged();
@@ -76,5 +77,27 @@ public class VideoFolderActivity extends AppCompatActivity {
             }while (cursor.moveToNext());
         }
         return fileItemArrayList;
+    }
+
+    @Override
+    public int getCount() {
+        if(allFolderList==null || allFolderList.size()<0){
+            return 0;
+        }
+        return allFolderList.size();
+    }
+
+    @Override
+    public String file(int position) {
+        return allFolderList.get(position);
+    }
+
+    @Override
+    public void onClickItem(int position) {
+        int indexPath = allFolderList.get(position).lastIndexOf("/");
+        String nameOFFolder = allFolderList.get(position).substring(indexPath+1);
+        Intent intent = new Intent(this, VideoFilesActivity.class);
+        intent.putExtra("folderName",nameOFFolder);
+        startActivity(intent);
     }
 }

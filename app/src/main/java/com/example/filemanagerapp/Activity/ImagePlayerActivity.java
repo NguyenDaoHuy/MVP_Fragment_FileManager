@@ -41,49 +41,6 @@ public class ImagePlayerActivity extends AppCompatActivity {
         String str = fileDevices.getPath();
         imgView.setImageBitmap(BitmapFactory.decodeFile(str));
     }
- /*   public static File takeScreenShot(View view, String fileName){
-         Date date = new Date();
-         CharSequence format = DateFormat.format("yyyy-MM-dd_hh:mm:ss",date);
-         try{
-             String dirPath = Environment.getExternalStorageDirectory().toString() + "/learnwithDeeksha";
-             File fileDir = new File(dirPath);
-             if(!fileDir.exists()){
-                 boolean mkdir = fileDir.mkdir();
-             }
-             String path = dirPath + "/" + fileName + "-" + format +".jpeg";
-             view.setDrawingCacheEnabled(true);
-             Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
-             view.setDrawingCacheEnabled(false);
-             File imageFile = new File(path);
-             FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
-             int quaility = 100;
-             bitmap.compress(Bitmap.CompressFormat.JPEG,quaility,fileOutputStream);
-             fileOutputStream.flush();
-             fileOutputStream.close();
-             return imageFile;
-         }catch(FileNotFoundException e){
-                   e.printStackTrace();
-         }catch (IOException e){
-             e.printStackTrace();
-         }
-         return null;
-    }
-
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static  String[] PERMISSION_STORAGE ={
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-    };
-
-    private static void verifyStoragePermission(Activity activity){
-        int permission = ActivityCompat.checkSelfPermission(activity,Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if(permission != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(activity,
-                    PERMISSION_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE);
-        }
-    } */
     private void shareButton(){
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override

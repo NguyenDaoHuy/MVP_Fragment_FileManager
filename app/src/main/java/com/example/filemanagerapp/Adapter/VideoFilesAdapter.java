@@ -24,12 +24,18 @@ import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.io.File;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.ViewHolder> {
+
+    private BottomSheetDialog bottomSheetDialog;
     private ArrayList<FileItem> fileItemArrayList;
     private Context context;
-    private BottomSheetDialog bottomSheetDialog;
 
     public VideoFilesAdapter(ArrayList<FileItem> fileItemArrayList, Context context) {
         this.fileItemArrayList = fileItemArrayList;
@@ -122,10 +128,11 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
                             AlertDialog.Builder builder = new AlertDialog.Builder(context);
                             builder.setTitle("Information");
                             FileItem fileItem = fileItemArrayList.get(position);
+                            long longTime = Long.parseLong(fileItem.getDateAdded());
                             builder.setMessage("Name :" + fileItem.getDisplayName() +
                                     "\nSize :" +android.text.format.Formatter.formatFileSize(context,
                                     Long.parseLong(size))+"MB" +
-                                    "\nDate :" + fileItem.getDateAdded());
+                                    "\nDate :" + convertEpouch(longTime));
                             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -198,5 +205,15 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
             videoTime = String.format("%02d:%02d",mns,scs);
         }
         return videoTime;
+    }
+    public interface VideoFilesInterface{
+         int getCount();
+         FileItem file (int position);
+         void onClickItem(int position);
+    }
+    public static String convertEpouch(long epouch){
+        LocalDate ld = Instant.ofEpochMilli(epouch).atZone(ZoneId.systemDefault()).toLocalDate();
+        String str = ld.toString();
+        return str;
     }
 }
