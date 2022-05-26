@@ -1,5 +1,6 @@
 package com.example.filemanagerapp.Adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import com.example.filemanagerapp.R;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHoder> {
 
-    private CategoryInterFace categoryInterFace;
+    private final CategoryInterFace categoryInterFace;
     private ImageView icon_logo;
     private TextView tvTenDanhMuc,tvDungLuong;
 
@@ -26,23 +27,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public CategoryAdapter.ViewHoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater =LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.item_danh_muc,parent,false);
-        ViewHoder viewHoder = new ViewHoder(view);
-        return viewHoder;
+        return new ViewHoder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull CategoryAdapter.ViewHoder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHoder holder, int position) {
        Category category = categoryInterFace.category(position);
        icon_logo.setImageResource(category.getIcon());
        tvTenDanhMuc.setText(category.getName());
        String dungLuong = String.valueOf(category.getStorage());
        tvDungLuong.setText(dungLuong + " item");
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                categoryInterFace.onClickItem(position);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> categoryInterFace.onClickItem(position));
     }
 
     @Override

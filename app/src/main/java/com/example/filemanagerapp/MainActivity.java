@@ -1,7 +1,23 @@
 package com.example.filemanagerapp;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.Settings;
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,18 +27,7 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.Manifest;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.Settings;
-import android.widget.Toast;
+
 import com.example.filemanagerapp.Activity.AudioFolderActivity;
 import com.example.filemanagerapp.Activity.DocumentsFileActivity;
 import com.example.filemanagerapp.Activity.ImageFolderActivity;
@@ -40,45 +45,44 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements CategoryAdapter.CategoryInterFace {
-    public static final int STORAGE_PERMISSION = 1;
-    public static final int REQUEST_PERMISSION_SETTINGS = 12;
-    private RecyclerView rvDanhMuc;
+    private static final int STORAGE_PERMISSION = 100;
+    private static final String TAG = "PERMISSON_TAG";
     private ArrayList<Category> categoryArrayList;
-    private DrawerLayout drawerLayout;
-    private Toolbar toolbar;
-    public static ArrayList<Item> itemDocumentsArrayList = new ArrayList<>();
-    public static ArrayList<Item> itemNewFileArrayList = new ArrayList<>();
-    public static ArrayList<FileItem> itemImageArrayList = new ArrayList<>();
-    public static ArrayList<String> imageFolderList = new ArrayList<>();
-    public static ArrayList<FileItem> itemVideoArrayList = new ArrayList<>();
-    public static ArrayList<String> videoFolderList = new ArrayList<>();
-    public static ArrayList<FileItem> itemAudioArrayList = new ArrayList<>();
-    public static ArrayList<String> audioFolderList = new ArrayList<>();
-    private File dir;
+    private static final ArrayList<Item> itemDocumentsArrayList = new ArrayList<>();
+    private static final ArrayList<Item> itemNewFileArrayList = new ArrayList<>();
+    private static final ArrayList<FileItem> itemImageArrayList = new ArrayList<>();
+    private static final ArrayList<String> imageFolderList = new ArrayList<>();
+    private static final ArrayList<FileItem> itemVideoArrayList = new ArrayList<>();
+    private static final ArrayList<String> videoFolderList = new ArrayList<>();
+    private static final ArrayList<FileItem> itemAudioArrayList = new ArrayList<>();
+    private static final ArrayList<String> audioFolderList = new ArrayList<>();
+    private final Activity mActivity = MainActivity.this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        rvDanhMuc = findViewById(R.id.rvDanhMuc);
-        drawerLayout = findViewById(R.id.drawer_layout);
+        RecyclerView rvDanhMuc = findViewById(R.id.rvDanhMuc);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
 
-        applyForPermission();
-        SharedPreferences preferences = getSharedPreferences("AllowAccess",MODE_PRIVATE);
-        String value = preferences.getString("Allow","OK");
-        if(value.equals("OK")){
-            Toast.makeText(MainActivity.this,"OK",Toast.LENGTH_SHORT).show();
+        if(checkPermission()){
+
         }else {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("Allow","OK");
-            editor.apply();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("App Permission")
+                    .setMessage("You must allow this aoo to access files on your device"
+                            +"\n\n"+"Now follow the below steps"+"\n\n"+
+                            "Open Settings from below button"+"\n"
+                            +"Click on Permission"+"\n"+"Allow access for storage")
+                    .setPositiveButton("Open Settings", (dialog, which) -> requestPermission()).create().show();
         }
-        toolbar = findViewById(R.id.toolBar);
+
+        Toolbar toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        dir = new File(String.valueOf(android.os.Environment.getExternalStorageDirectory()));
+        File dir = new File(String.valueOf(Environment.getExternalStorageDirectory()));
         walkdir(dir);
         getFolderImage();
         getFolderAudio();
@@ -99,63 +103,84 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.C
         rvDanhMuc.setLayoutManager(layoutManager);
         rvDanhMuc.setAdapter(categoryAdapter);
     }
-    private void applyForPermission() {
-        if(ContextCompat.checkSelfPermission(getApplicationContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED){
-        }else{
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE },STORAGE_PERMISSION);
-        }
-    }
+
+      private void requestPermission(){
+          if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+              try {
+                  Log.d(TAG, "requestPermission: try");
+                  Intent intent = new Intent();
+                  intent.setAction(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                  Uri uri = Uri.fromParts("package", this.getPackageName(),null);
+                  intent.setData(uri);
+                  storageActivityResultLauncher.launch(intent);
+              }catch (Exception e){
+                  Log.d(TAG, "requestPermission: catch");
+                  Intent intent = new Intent();
+                  intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                  storageActivityResultLauncher.launch(intent);
+              }
+          }else {
+              ActivityCompat.requestPermissions(this,
+                      new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},
+                      STORAGE_PERMISSION);
+          }
+      }
+
+      private final ActivityResultLauncher<Intent> storageActivityResultLauncher = registerForActivityResult(
+              new ActivityResultContracts.StartActivityForResult(),
+              result -> {
+                  Log.d(TAG,"onActivityResult: ");
+                  if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+                       if(Environment.isExternalStorageManager()){
+                            Log.d(TAG,"onActivityResult: Manage External Storage Permission is granted");
+                            Toast.makeText(MainActivity.this,"Manage External Storage Permission is granted",Toast.LENGTH_SHORT).show();
+                            //hàm
+                            restartActivity(mActivity);
+                       }
+                  }else {
+                      Log.d(TAG,"onActivityResult: Manage External Storage Permission is denied");
+                      Toast.makeText(MainActivity.this,"Manage External Storage Permission is denied",Toast.LENGTH_SHORT).show();
+                  }
+              }
+      );
+
+      public boolean checkPermission(){
+          if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+                return Environment.isExternalStorageManager();
+          }else {
+              int write = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+              int read = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE);
+              return write == PackageManager.PERMISSION_GRANTED && read == PackageManager.PERMISSION_GRANTED;
+          }
+      }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==STORAGE_PERMISSION){
-            for (int i = 0; i < permissions.length; i++) {
-                String per = permissions[i];
-                if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                    boolean showRationale = shouldShowRequestPermissionRationale(per);
-                    if (!showRationale) {
-                        //user clicked on never ask again
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle("App Permission")
-                                .setMessage("You must allow this aoo to access files on your device"
-                                +"\n\n"+"Now follow the below steps"+"\n\n"+
-                                        "Open Settings from below button"+"\n"
-                                +"Click on Permission"+"\n"+"Allow access for storage")
-                                .setPositiveButton("Open Settings", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                        Uri uri = Uri.fromParts("package",getPackageName(),null);
-                                        intent.setData(uri);
-                                        startActivityForResult(intent,REQUEST_PERMISSION_SETTINGS);
-                                    }
-                                }).create().show();
-                    }
-                    else {
-                        ActivityCompat.requestPermissions(MainActivity.this,
-                              new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION);
-                }
-                } else {
-                    Toast.makeText(MainActivity.this,"OK",Toast.LENGTH_SHORT).show();
-                }
+        if(requestCode == STORAGE_PERMISSION){
+            if(grantResults.length > 0){
+                 boolean write = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                if(write){
+                       // hàm
+                      restartActivity(mActivity);
+                      Log.d(TAG,"onRequestPermissionResult: External Storage permission granted");
+                 }else {
+                     Log.d(TAG,"onRequestPermissionResult: External Storage permission denied");
+                     Toast.makeText(MainActivity.this,"External Storage permission denied",Toast.LENGTH_SHORT).show();
+                 }
             }
         }
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-        }
+    public static void restartActivity(Activity activity) {
+        activity.recreate();
     }
 
     @Override
     public int getCount() {
-        if(categoryArrayList==null || categoryArrayList.size()<0){
+        if(categoryArrayList == null){
             return 0;
+        } else {
+            categoryArrayList.size();
         }
         return categoryArrayList.size();
     }
@@ -196,28 +221,29 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.C
         }
     }
     public void walkdir(File dir) {
-        File listFile[] = dir.listFiles();
+        File[] listFile = dir.listFiles();
         int monthNow = Calendar.getInstance().get(Calendar.MONTH) +1;
         int yearNow = Calendar.getInstance().get(Calendar.YEAR);
         try{
+            assert listFile != null;
             if (listFile.length > 0) {
-                for (int i = 0; i < listFile.length; i++) {
-                    if (listFile[i].isDirectory() == true) {
-                        walkdir(listFile[i]);
+                for (File file : listFile) {
+                    if (file.isDirectory()) {
+                        walkdir(file);
                     } else {
-                        String name = listFile[i].getName();
-                        String path = listFile[i].getPath();
-                        Date date = new Date(listFile[i].lastModified());
+                        String name = file.getName();
+                        String path = file.getPath();
+                        Date date = new Date(file.lastModified());
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(date);
                         int month = cal.get(Calendar.MONTH) + 1;
                         int year = cal.get(Calendar.YEAR);
 
-                        if (listFile[i].getName().endsWith(".docx") ||
-                                listFile[i].getName().endsWith(".pdf") ||
-                                listFile[i].getName().endsWith(".txt") ||
-                                listFile[i].getName().endsWith(".pptx") ||
-                                listFile[i].getName().endsWith(".xls")) {
+                        if (file.getName().endsWith(".docx") ||
+                                file.getName().endsWith(".pdf") ||
+                                file.getName().endsWith(".txt") ||
+                                file.getName().endsWith(".pptx") ||
+                                file.getName().endsWith(".xls")) {
                             if (month == monthNow && year == yearNow) {
                                 itemNewFileArrayList.add(new Item(name, path));
                             }
@@ -233,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.C
     }
     public void getFolderImage(){
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        Cursor cursor = getContentResolver().query(uri,null,null,null,null);
+        @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(uri,null,null,null,null);
         if(cursor != null && cursor.moveToNext()){
             do{
                 String id = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media._ID));
@@ -256,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.C
     }
     public void getFolderAudio(){
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor cursor = getContentResolver().query(uri,null,null,null,null);
+        @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(uri,null,null,null,null);
         if(cursor != null && cursor.moveToNext()){
             do{
                 String id = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
@@ -279,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.C
     }
     public void getFolderVideo(){
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-        Cursor cursor = getContentResolver().query(uri,null,null,null,null);
+        @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(uri,null,null,null,null);
         if(cursor != null && cursor.moveToNext()){
             do{
                 String id = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media._ID));
@@ -300,5 +326,28 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.C
             }while (cursor.moveToNext());
 
         }
+    }
+    public static ArrayList<Item> getArrayItemDocuments(){
+        return itemDocumentsArrayList;
+    }
+
+    public static ArrayList<Item> getItemNewFileArrayList() {
+        return itemNewFileArrayList;
+    }
+
+    public static ArrayList<String> getImageFolderList() {
+        return imageFolderList;
+    }
+
+    public static ArrayList<String> getVideoFolderList() {
+        return videoFolderList;
+    }
+
+    public static ArrayList<FileItem> getItemAudioArrayList() {
+        return itemAudioArrayList;
+    }
+
+    public static ArrayList<String> getAudioFolderList() {
+        return audioFolderList;
     }
 }

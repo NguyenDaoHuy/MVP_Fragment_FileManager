@@ -10,7 +10,7 @@ import com.example.filemanagerapp.R;
 
 public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecyclerViewAdapter.ViewHolder> {
 
-    private FolderInterface imageFolderInterface;
+    private final FolderInterface imageFolderInterface;
 
     public FolderRecyclerViewAdapter(FolderInterface imageFolderInterface) {
         this.imageFolderInterface = imageFolderInterface;
@@ -24,31 +24,26 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FolderRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         int indexPath = imageFolderInterface.file(position).lastIndexOf("/");
         String nameOFFolder = imageFolderInterface.file(position).substring(indexPath+1);
         holder.folderName.setText(nameOFFolder);
         holder.folderPath.setText(imageFolderInterface.file(position));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageFolderInterface.onClickItem(position);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> imageFolderInterface.onClickItem(position));
     }
     @Override
     public int getItemCount() {
         return imageFolderInterface.getCount();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView folderName,folderPath,folderFiles;
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+        private final TextView folderName;
+        private final TextView folderPath;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             folderName = itemView.findViewById(R.id.folderName);
             folderPath = itemView.findViewById(R.id.folderPath);
-         //   folderFiles = itemView.findViewById(R.id.folderFiles);
         }
     }
     public interface FolderInterface{

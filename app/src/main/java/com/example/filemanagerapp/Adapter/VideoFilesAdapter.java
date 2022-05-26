@@ -1,5 +1,6 @@
 package com.example.filemanagerapp.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,7 @@ import java.time.ZoneId;
 
 public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.ViewHolder> {
 
-    private VideoFilesInterface videoFilesInterface;
+    private final VideoFilesInterface videoFilesInterface;
 
     public VideoFilesAdapter(VideoFilesInterface videoFilesInterface) {
         this.videoFilesInterface = videoFilesInterface;
@@ -32,7 +33,7 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VideoFilesAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             FileItem video = videoFilesInterface.file(position);
             holder.videoName.setText(video.getDisplayName());
             String size = video.getSize();
@@ -43,31 +44,16 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
 
             Glide.with(videoFilesInterface.context()).load(new File(video.getPath())).into(holder.thumbnail);
 
-            holder.video_menu_more.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                     videoFilesInterface.onMenuClick(position);
-                }
-            });
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    videoFilesInterface.onClickItem(position);
-                }
-            });
-          holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                     return videoFilesInterface.onLongClick(position,v);
-            }
-        });
+            holder.video_menu_more.setOnClickListener(v -> videoFilesInterface.onMenuClick(position));
+            holder.itemView.setOnClickListener(v -> videoFilesInterface.onClickItem(position));
+          holder.itemView.setOnLongClickListener(v -> videoFilesInterface.onLongClick(position,v));
     }
 
     @Override
     public int getItemCount() {
         return videoFilesInterface.getCount();
     }
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         ImageView thumbnail,video_menu_more;
         TextView video_duration,videoName,video_size;
         public ViewHolder(@NonNull View itemView) {
@@ -79,6 +65,7 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
             video_size =itemView.findViewById(R.id.video_size);
         }
     }
+    @SuppressLint("DefaultLocale")
     public String timeConversion(long value){
         String videoTime;
         int duration = (int) value;
@@ -102,7 +89,6 @@ public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.Vi
     }
     public static String convertEpouch(long epouch){
         LocalDate ld = Instant.ofEpochMilli(epouch).atZone(ZoneId.systemDefault()).toLocalDate();
-        String str = ld.toString();
-        return str;
+        return ld.toString();
     }
 }

@@ -17,22 +17,20 @@ import java.util.Date;
 
 public class ImagePlayerActivity extends AppCompatActivity {
 
-    private ImageView imgView,btnScreenshot,btnShare;
+    private ImageView imgView;
+    private ImageView btnShare;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         imgView = findViewById(R.id.imgView);
-        btnScreenshot = findViewById(R.id.btnScreenshot);
+        ImageView btnScreenshot = findViewById(R.id.btnScreenshot);
         btnShare = findViewById(R.id.btnShare);
         getDataImage();
       //  verifyStoragePermission(this);
-        btnScreenshot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-             //    takeScreenShot(getWindow().getDecorView().getRootView(),"result");
-                takeScreenshot();
-            }
+        btnScreenshot.setOnClickListener(v -> {
+         //    takeScreenShot(getWindow().getDecorView().getRootView(),"result");
+            takeScreenshot();
         });
         shareButton();
     }
@@ -42,19 +40,17 @@ public class ImagePlayerActivity extends AppCompatActivity {
         imgView.setImageBitmap(BitmapFactory.decodeFile(str));
     }
     private void shareButton(){
-        btnShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                 Intent intent = new Intent(Intent.ACTION_SEND);
-                 intent.setType("text/plain");
-                 String body = "Download this file";
-                 String sub = "http://play.google.com";
-                 intent.putExtra(Intent.EXTRA_TEXT,body);
-                 intent.putExtra(Intent.EXTRA_TEXT,sub);
-                 startActivity(Intent.createChooser(intent,"Share using "));
-            }
+        btnShare.setOnClickListener(v -> {
+             Intent intent = new Intent(Intent.ACTION_SEND);
+             intent.setType("text/plain");
+             String body = "Download this file";
+             String sub = "http://play.google.com";
+             intent.putExtra(Intent.EXTRA_TEXT,body);
+             intent.putExtra(Intent.EXTRA_TEXT,sub);
+             startActivity(Intent.createChooser(intent,"Share using "));
         });
     }
+    @SuppressWarnings("deprecation")
     private void takeScreenshot() {
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);

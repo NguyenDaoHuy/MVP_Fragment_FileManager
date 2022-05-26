@@ -15,7 +15,7 @@ import com.example.filemanagerapp.R;
 
 public class ImageFilesAdapter extends RecyclerView.Adapter<ImageFilesAdapter.ViewHolder> {
 
-    private ImageFilesInterface imageFilesInterface;
+    private final ImageFilesInterface imageFilesInterface;
 
     public ImageFilesAdapter(ImageFilesInterface imageFilesInterface) {
         this.imageFilesInterface = imageFilesInterface;
@@ -29,31 +29,16 @@ public class ImageFilesAdapter extends RecyclerView.Adapter<ImageFilesAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ImageFilesAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         FileItem image = imageFilesInterface.image(position);
         holder.imgAnh.setImageBitmap(BitmapFactory.decodeFile(image.getPath()));
         holder.tenAnh.setText(image.getDisplayName());
         String size = image.getSize();
         holder.sizeAnh.setText(android.text.format.Formatter.formatFileSize(imageFilesInterface.context(),
                 Long.parseLong(size)));
-        holder.btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageFilesInterface.onClickMenu(position);
-            }
-        });
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageFilesInterface.onClickItem(position);
-            }
-        });
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return imageFilesInterface.onLongClickItem(position,v);
-            }
-        });
+        holder.btnMenu.setOnClickListener(v -> imageFilesInterface.onClickMenu(position));
+        holder.itemView.setOnClickListener(v -> imageFilesInterface.onClickItem(position));
+        holder.itemView.setOnLongClickListener(v -> imageFilesInterface.onLongClickItem(position,v));
     }
 
     @Override
@@ -61,7 +46,7 @@ public class ImageFilesAdapter extends RecyclerView.Adapter<ImageFilesAdapter.Vi
         return imageFilesInterface.getCount();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout item_image;
         ImageView btnMenu,imgAnh;
         TextView tenAnh,sizeAnh;

@@ -3,6 +3,7 @@ package com.example.filemanagerapp.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,7 +19,6 @@ public class AudioFilesActivity extends AppCompatActivity implements AudioFilesA
 
     private RecyclerView recyclerView;
     private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
-    private AudioFilesAdapter audioFilesAdapter;
     private String folder_name;
 
     @Override
@@ -29,9 +29,10 @@ public class AudioFilesActivity extends AppCompatActivity implements AudioFilesA
         folder_name = getIntent().getStringExtra("folderName");
         showVideoFile();
     }
+    @SuppressLint("NotifyDataSetChanged")
     private void showVideoFile() {
         fileItemArrayList = fetchMedia(folder_name);
-        audioFilesAdapter = new AudioFilesAdapter(this);
+        AudioFilesAdapter audioFilesAdapter = new AudioFilesAdapter(this);
         recyclerView.setAdapter(audioFilesAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,false));
@@ -43,7 +44,7 @@ public class AudioFilesActivity extends AppCompatActivity implements AudioFilesA
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         String selection = MediaStore.Audio.Media.DATA+" like?";
         String[] selectionArg = new String[]{"%"+folderName+"%"};
-        Cursor cursor = getContentResolver().query(uri,null,
+        @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(uri,null,
                 selection,selectionArg,null);
         if(cursor!=null && cursor.moveToNext()){
             do{
@@ -70,8 +71,10 @@ public class AudioFilesActivity extends AppCompatActivity implements AudioFilesA
 
     @Override
     public int getCount() {
-        if(fileItemArrayList==null || fileItemArrayList.size()<0){
+        if(fileItemArrayList == null){
             return 0;
+        } else {
+            fileItemArrayList.size();
         }
         return fileItemArrayList.size();
     }

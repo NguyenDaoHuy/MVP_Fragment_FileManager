@@ -1,14 +1,13 @@
 package com.example.filemanagerapp.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
 import java.io.IOException;
@@ -22,7 +21,7 @@ public class AudioPlayerActivity extends AppCompatActivity {
     private ImageView next,pause_play,previous;
     private ArrayList<FileItem> audioArrayList;
     private FileItem audio;
-    private MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();
+    private final MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,24 +78,9 @@ public class AudioPlayerActivity extends AppCompatActivity {
         audio_name.setText(audio.getDisplayName());
         total_time.setText(convertToMMSS(audio.getDuration()));
         playMusic();
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                 nextMusic();
-            }
-        });
-        previous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                 previousMusic();
-            }
-        });
-        pause_play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                 pauseMusic();
-            }
-        });
+        next.setOnClickListener(v -> nextMusic());
+        previous.setOnClickListener(v -> previousMusic());
+        pause_play.setOnClickListener(v -> pauseMusic());
     }
     private void playMusic(){
         mediaPlayer.reset();
@@ -130,8 +114,9 @@ public class AudioPlayerActivity extends AppCompatActivity {
         else
             mediaPlayer.start();
     }
+    @SuppressLint("DefaultLocale")
     public static String convertToMMSS(String duration){
-        Long millis = Long.parseLong(duration);
+        long millis = Long.parseLong(duration);
         return String.format("%02d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(millis) % TimeUnit.HOURS.toMinutes(1),
                 TimeUnit.MILLISECONDS.toSeconds(millis) % TimeUnit.MINUTES.toSeconds(1));

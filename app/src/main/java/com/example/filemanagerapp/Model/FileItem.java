@@ -58,20 +58,8 @@ public class FileItem implements Serializable, Parcelable {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDisplayName() {
         return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
     }
 
     public String getSize() {
@@ -86,10 +74,6 @@ public class FileItem implements Serializable, Parcelable {
         return duration;
     }
 
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
     public String getPath() {
         return path;
     }
@@ -100,10 +84,6 @@ public class FileItem implements Serializable, Parcelable {
 
     public String getDateAdded() {
         return dateAdded;
-    }
-
-    public void setDateAdded(String dateAdded) {
-        this.dateAdded = dateAdded;
     }
 
     @Override

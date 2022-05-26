@@ -13,7 +13,7 @@ import com.example.filemanagerapp.R;
 
 public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.ViewHolder> {
 
-    private AudioFileInterface audioFileInterface;
+    private final AudioFileInterface audioFileInterface;
 
     public AudioFilesAdapter(AudioFileInterface audioFileInterface) {
         this.audioFileInterface = audioFileInterface;
@@ -34,12 +34,7 @@ public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.Vi
         holder.audio_size.setText(android.text.format.Formatter.formatFileSize(audioFileInterface.context(),
                 Long.parseLong(size)));
         holder.tvTimeAudio.setText(AudioPlayerActivity.convertToMMSS(v.getDuration()));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                audioFileInterface.onClickItem(position);
-            }
-        });
+        holder.itemView.setOnClickListener(v1 -> audioFileInterface.onClickItem(position));
     }
 
     @Override
@@ -47,8 +42,10 @@ public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.Vi
         return audioFileInterface.getCount();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView audioName,audio_size,tvTimeAudio;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView audioName;
+        private final TextView audio_size;
+        private final TextView tvTimeAudio;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             audioName = itemView.findViewById(R.id.audioName);

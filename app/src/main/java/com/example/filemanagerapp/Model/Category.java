@@ -1,13 +1,14 @@
 package com.example.filemanagerapp.Model;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class Category implements Serializable{
     private int id;
     private String name;
-    private int icon;
-    private int storage;
-    public Category(){}
+    private final int icon;
+    private final int storage;
 
     public Category(int id, String name, int icon, int storage) {
         this.id = id;
@@ -36,18 +37,11 @@ public class Category implements Serializable{
         return icon;
     }
 
-    public void setIcon(int icon) {
-        this.icon = icon;
-    }
-
     public int getStorage() {
         return storage;
     }
 
-    public void setStorage(int storage) {
-        this.storage = storage;
-    }
-
+    @NonNull
     @Override
     public String toString() {
         return "DanhMuc{" +

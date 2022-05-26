@@ -14,7 +14,7 @@ import com.example.filemanagerapp.R;
 
 public class DocumentsFilesAdapter extends RecyclerView.Adapter<DocumentsFilesAdapter.ViewHolder> {
 
-    private DocumentFileInterface documentFileInterface;
+    private final DocumentFileInterface documentFileInterface;
 
     public DocumentsFilesAdapter(DocumentFileInterface documentFileInterface) {
         this.documentFileInterface = documentFileInterface;
@@ -28,7 +28,7 @@ public class DocumentsFilesAdapter extends RecyclerView.Adapter<DocumentsFilesAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DocumentsFilesAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Item i = documentFileInterface.item(position);
         holder.documentsName.setText(i.getName());
         holder.documentsPath.setText(i.getPath());
@@ -48,12 +48,7 @@ public class DocumentsFilesAdapter extends RecyclerView.Adapter<DocumentsFilesAd
             holder.imgFolder.setImageBitmap(BitmapFactory.decodeFile(i.getPath()));
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    documentFileInterface.onClickItem(position);
-                }
-        });
+        holder.itemView.setOnClickListener(v -> documentFileInterface.onClickItem(position));
     }
 
     @Override
@@ -61,9 +56,10 @@ public class DocumentsFilesAdapter extends RecyclerView.Adapter<DocumentsFilesAd
         return documentFileInterface.getCount();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView documentsName,documentsPath;
-        private ImageView imgFolder;
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+        private final TextView documentsName;
+        private final TextView documentsPath;
+        private final ImageView imgFolder;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             documentsName = itemView.findViewById(R.id.folderName);

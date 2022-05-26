@@ -1,12 +1,13 @@
 package com.example.filemanagerapp.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
 import com.google.android.exoplayer2.C;
@@ -28,18 +29,14 @@ public class VideoPlayerActivity extends AppCompatActivity {
     private PlayerView playerView;
     private SimpleExoPlayer player;
     private int position;
-    private String videoTitle;
     private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
-    private TextView title;
-    private ConcatenatingMediaSource concatenatingMediaSource;
-    private MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();
+    private final MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
         playerView = findViewById(R.id.exoplayer_view);
         position = getIntent().getIntExtra("position",1);
-        videoTitle = getIntent().getStringExtra("video_title");
         fileItemArrayList = getIntent().getExtras().getParcelableArrayList("videoArrayList");
 
         playerVideo();
@@ -52,7 +49,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
         player = new SimpleExoPlayer.Builder(this).build();
         DefaultDataSourceFactory defaultDataSourceFactory = new DefaultDataSourceFactory(
                 this, Util.getUserAgent(this,"app"));
-        concatenatingMediaSource = new ConcatenatingMediaSource();
+        ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource();
         for(int i = 0; i< fileItemArrayList.size(); i++){
             new File(String.valueOf(fileItemArrayList.get(i)));
             MediaSource mediaSource = new ProgressiveMediaSource.Factory(defaultDataSourceFactory)
@@ -69,7 +66,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
     private void playError() {
         player.addListener(new Player.EventListener(){
             @Override
-            public void onPlayerError(ExoPlaybackException error) {
+            public void onPlayerError(@NonNull ExoPlaybackException error) {
                 Toast.makeText(VideoPlayerActivity.this,"Video Playing Error",Toast.LENGTH_SHORT).show();
             }
         });
