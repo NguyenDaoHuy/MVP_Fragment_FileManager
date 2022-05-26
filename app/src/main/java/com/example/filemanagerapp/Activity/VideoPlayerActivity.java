@@ -38,13 +38,9 @@ public class VideoPlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
         playerView = findViewById(R.id.exoplayer_view);
-//        getSupportActionBar().hide();
         position = getIntent().getIntExtra("position",1);
         videoTitle = getIntent().getStringExtra("video_title");
         fileItemArrayList = getIntent().getExtras().getParcelableArrayList("videoArrayList");
-
-     //   title = findViewById(R.id.video_title);
-     //   title.setText(videoTitle);
 
         playerVideo();
     }

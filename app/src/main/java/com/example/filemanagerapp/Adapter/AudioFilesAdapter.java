@@ -1,7 +1,6 @@
 package com.example.filemanagerapp.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +8,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.filemanagerapp.Activity.AudioPlayerActivity;
-import com.example.filemanagerapp.Activity.MyMediaPlayer;
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
-import java.util.ArrayList;
 
 public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.ViewHolder> {
 
-    AudioFileInterface audioFileInterface;
+    private AudioFileInterface audioFileInterface;
 
     public AudioFilesAdapter(AudioFileInterface audioFileInterface) {
         this.audioFileInterface = audioFileInterface;

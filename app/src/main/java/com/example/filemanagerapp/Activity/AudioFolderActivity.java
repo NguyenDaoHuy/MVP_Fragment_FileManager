@@ -6,22 +6,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.widget.TextView;
 import com.example.filemanagerapp.Adapter.FolderRecyclerViewAdapter;
-import com.example.filemanagerapp.Model.FileItem;
+import com.example.filemanagerapp.MainActivity;
 import com.example.filemanagerapp.R;
-import java.util.ArrayList;
 
 public class AudioFolderActivity extends AppCompatActivity implements FolderRecyclerViewAdapter.FolderInterface {
     private RecyclerView recyclerView;
     private TextView tvThongBao;
-    private ArrayList<FileItem> fileItems = new ArrayList<>();
-    private ArrayList<String> allFolderList = new ArrayList<>();
     private FolderRecyclerViewAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +30,7 @@ public class AudioFolderActivity extends AppCompatActivity implements FolderRecy
             Uri uri = Uri.fromParts("package",getPackageName(),null);
             intent.setData(uri);
         }
-        showFolders();
-    }
-    private void showFolders() {
-        fileItems = fetchMedia();
-        if(fileItems.size() == 0){
+        if(MainActivity.itemAudioArrayList.size() == 0){
             tvThongBao.setText("Không có dữ liệu");
         }
         adapter = new FolderRecyclerViewAdapter(this);
@@ -47,7 +38,7 @@ public class AudioFolderActivity extends AppCompatActivity implements FolderRecy
         recyclerView.setLayoutManager(new LinearLayoutManager(AudioFolderActivity.this,RecyclerView.VERTICAL,false));
         adapter.notifyDataSetChanged();
     }
-    public ArrayList<FileItem> fetchMedia(){
+  /*  public ArrayList<FileItem> fetchMedia(){
         ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor cursor = getContentResolver().query(uri,null,null,null,null);
@@ -72,25 +63,25 @@ public class AudioFolderActivity extends AppCompatActivity implements FolderRecy
             }while (cursor.moveToNext());
         }
         return fileItemArrayList;
-    }
+    } */
 
     @Override
     public int getCount() {
-        if(allFolderList==null || allFolderList.size()<0){
+        if(MainActivity.audioFolderList==null || MainActivity.audioFolderList.size()<0){
             return 0;
         }
-        return allFolderList.size();
+        return MainActivity.audioFolderList.size();
     }
 
     @Override
     public String file(int position) {
-        return allFolderList.get(position);
+        return MainActivity.audioFolderList.get(position);
     }
 
     @Override
     public void onClickItem(int position) {
-        int indexPath = allFolderList.get(position).lastIndexOf("/");
-        String nameOFFolder = allFolderList.get(position).substring(indexPath+1);
+        int indexPath = MainActivity.audioFolderList.get(position).lastIndexOf("/");
+        String nameOFFolder = MainActivity.audioFolderList.get(position).substring(indexPath+1);
         Intent intent = new Intent(this, AudioFilesActivity.class);
         intent.putExtra("folderName",nameOFFolder);
         startActivity(intent);

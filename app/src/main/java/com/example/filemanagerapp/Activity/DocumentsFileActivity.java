@@ -4,23 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.widget.Toast;
-
 import com.example.filemanagerapp.Adapter.DocumentsFilesAdapter;
+import com.example.filemanagerapp.MainActivity;
 import com.example.filemanagerapp.Model.Item;
 import com.example.filemanagerapp.R;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
 
 public class DocumentsFileActivity extends AppCompatActivity implements DocumentsFilesAdapter.DocumentFileInterface {
-
-    private ArrayList<Item> itemArrayList = new ArrayList<>();
+ //   private ArrayList<Item> itemArrayList = new ArrayList<>();
     private File dir;
     private DocumentsFilesAdapter adapter;
     private RecyclerView recyclerView;
@@ -29,8 +23,8 @@ public class DocumentsFileActivity extends AppCompatActivity implements Document
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_documents_file);
         recyclerView = findViewById(R.id.rvDocuments);
-        dir = new File(String.valueOf(android.os.Environment.getExternalStorageDirectory()));
-        walkdir(dir);
+     /*   dir = new File(String.valueOf(android.os.Environment.getExternalStorageDirectory()));
+        walkdir(dir); */
         showDocuments();
     }
     private void showDocuments(){
@@ -40,7 +34,7 @@ public class DocumentsFileActivity extends AppCompatActivity implements Document
         adapter.notifyDataSetChanged();
     }
 
-    public void walkdir(File dir) {
+ /*   public void walkdir(File dir) {
         File listFile[] = dir.listFiles();
         try{
             if (listFile.length > 0) {
@@ -65,19 +59,19 @@ public class DocumentsFileActivity extends AppCompatActivity implements Document
         }catch (Exception e){
             e.printStackTrace();
         }
-    }
+    }  */
 
     @Override
     public int getCount() {
-        if(itemArrayList==null || itemArrayList.size()<0){
+        if(MainActivity.itemDocumentsArrayList ==null || MainActivity.itemDocumentsArrayList.size()<0){
             return 0;
         }
-        return itemArrayList.size();
+        return MainActivity.itemDocumentsArrayList.size();
     }
 
     @Override
     public Item item(int position) {
-        return itemArrayList.get(position);
+        return MainActivity.itemDocumentsArrayList.get(position);
     }
 
     @Override
@@ -85,7 +79,7 @@ public class DocumentsFileActivity extends AppCompatActivity implements Document
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setAction(Intent.ACTION_VIEW);
-        File file = new File(itemArrayList.get(position).getPath());
+        File file = new File(MainActivity.itemDocumentsArrayList.get(position).getPath());
         String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
         String mimetype = android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         Uri photoURI = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,13 +17,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
 import com.example.filemanagerapp.Adapter.ImageFilesAdapter;
 import com.example.filemanagerapp.Adapter.VideoFilesAdapter;
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -41,15 +38,15 @@ public class ImageFilesActivity extends AppCompatActivity implements ImageFilesA
         setContentView(R.layout.activity_image);
         recyclerView = findViewById(R.id.lvListItem);
         folder_name = getIntent().getStringExtra("folderName");
-        showImageFile();
-    }
-    private void showImageFile() {
-        fileItemArrayList = fetchMedia(folder_name);
         imagesAdapter = new ImageFilesAdapter(this);
         recyclerView.setAdapter(imagesAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,false));
         imagesAdapter.notifyDataSetChanged();
+        showImageFile();
+    }
+    private void showImageFile() {
+        fileItemArrayList = fetchMedia(folder_name);
     }
 
     private ArrayList<FileItem> fetchMedia(String folderName) {

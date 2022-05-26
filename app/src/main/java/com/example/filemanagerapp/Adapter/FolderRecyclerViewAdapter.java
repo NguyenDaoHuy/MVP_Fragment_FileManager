@@ -6,12 +6,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.filemanagerapp.R;
 
 public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecyclerViewAdapter.ViewHolder> {
 
-    FolderInterface imageFolderInterface;
+    private FolderInterface imageFolderInterface;
 
     public FolderRecyclerViewAdapter(FolderInterface imageFolderInterface) {
         this.imageFolderInterface = imageFolderInterface;
@@ -30,7 +29,6 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
         String nameOFFolder = imageFolderInterface.file(position).substring(indexPath+1);
         holder.folderName.setText(nameOFFolder);
         holder.folderPath.setText(imageFolderInterface.file(position));
-        holder.folderFiles.setText("5 Image");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +48,7 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
             super(itemView);
             folderName = itemView.findViewById(R.id.folderName);
             folderPath = itemView.findViewById(R.id.folderPath);
-            folderFiles = itemView.findViewById(R.id.folderFiles);
+         //   folderFiles = itemView.findViewById(R.id.folderFiles);
         }
     }
     public interface FolderInterface{

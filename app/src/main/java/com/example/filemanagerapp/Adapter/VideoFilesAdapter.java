@@ -18,7 +18,7 @@ import java.time.ZoneId;
 
 public class VideoFilesAdapter extends RecyclerView.Adapter<VideoFilesAdapter.ViewHolder> {
 
-   VideoFilesInterface videoFilesInterface;
+    private VideoFilesInterface videoFilesInterface;
 
     public VideoFilesAdapter(VideoFilesInterface videoFilesInterface) {
         this.videoFilesInterface = videoFilesInterface;

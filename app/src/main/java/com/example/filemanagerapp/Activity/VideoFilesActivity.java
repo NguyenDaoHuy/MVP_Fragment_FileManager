@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,14 +17,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
 import com.example.filemanagerapp.Adapter.VideoFilesAdapter;
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class VideoFilesActivity extends AppCompatActivity implements VideoFilesAdapter.VideoFilesInterface {

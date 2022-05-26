@@ -17,7 +17,7 @@ import java.util.Date;
 
 public class ImagePlayerActivity extends AppCompatActivity {
 
-    ImageView imgView,btnScreenshot,btnShare;
+    private ImageView imgView,btnScreenshot,btnShare;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

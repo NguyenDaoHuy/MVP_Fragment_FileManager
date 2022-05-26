@@ -13,7 +13,7 @@ import com.example.filemanagerapp.R;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHoder> {
 
-    CategoryInterFace categoryInterFace;
+    private CategoryInterFace categoryInterFace;
     private ImageView icon_logo;
     private TextView tvTenDanhMuc,tvDungLuong;
 
@@ -36,7 +36,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
        icon_logo.setImageResource(category.getIcon());
        tvTenDanhMuc.setText(category.getName());
        String dungLuong = String.valueOf(category.getStorage());
-       tvDungLuong.setText(dungLuong);
+       tvDungLuong.setText(dungLuong + " item");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -8,16 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.filemanagerapp.Model.FileItem;
 import com.example.filemanagerapp.R;
 
 public class ImageFilesAdapter extends RecyclerView.Adapter<ImageFilesAdapter.ViewHolder> {
 
-    ImageFilesInterface imageFilesInterface;
+    private ImageFilesInterface imageFilesInterface;
 
     public ImageFilesAdapter(ImageFilesInterface imageFilesInterface) {
         this.imageFilesInterface = imageFilesInterface;

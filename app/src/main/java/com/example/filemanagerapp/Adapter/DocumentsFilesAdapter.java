@@ -14,7 +14,7 @@ import com.example.filemanagerapp.R;
 
 public class DocumentsFilesAdapter extends RecyclerView.Adapter<DocumentsFilesAdapter.ViewHolder> {
 
-    DocumentFileInterface documentFileInterface;
+    private DocumentFileInterface documentFileInterface;
 
     public DocumentsFilesAdapter(DocumentFileInterface documentFileInterface) {
         this.documentFileInterface = documentFileInterface;
