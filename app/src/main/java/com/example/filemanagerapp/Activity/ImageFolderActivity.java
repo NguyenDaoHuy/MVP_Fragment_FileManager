@@ -54,20 +54,19 @@ public class ImageFolderActivity extends AppCompatActivity implements FolderRecy
         Cursor cursor = getContentResolver().query(uri,null,null,null,null);
         if(cursor != null && cursor.moveToNext()){
             do{
-                String id = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media._ID));
-                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.TITLE));
-                String displayName = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME));
-                String size = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.SIZE));
-                String duration = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DURATION));
-                String path = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATA));
-                String dateAdded = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATE_ADDED));
+                String id = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media._ID));
+                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.TITLE));
+                String displayName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
+                String size = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.SIZE));
+                String duration = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DURATION));
+                String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                String dateAdded = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED));
                 FileItem fileItem = new FileItem(id,title,displayName,size,duration,path,dateAdded);
 
                 int index = path.lastIndexOf("/");
                 String subString = path.substring(0,index);
                 if(!allFolderList.contains(subString)){
                     allFolderList.add(subString);
-                    System.out.println("--------------------->"+allFolderList.size());
                 }
                 fileItemArrayList.add(fileItem);
             }while (cursor.moveToNext());
