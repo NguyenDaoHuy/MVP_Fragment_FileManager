@@ -11,10 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.filemanagerapp.Adapter.FolderRecyclerViewAdapter;
-import com.example.filemanagerapp.MainActivity;
 import com.example.filemanagerapp.R;
 
+import java.util.ArrayList;
+
 public class ImageFolderActivity extends AppCompatActivity implements FolderRecyclerViewAdapter.FolderInterface {
+    private ArrayList<String> folderImageList;
     @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class ImageFolderActivity extends AppCompatActivity implements FolderRecy
             Uri uri = Uri.fromParts("package",getPackageName(),null);
             intent.setData(uri);
         }
+        folderImageList = getIntent().getExtras().getStringArrayList("folderImageList");
         FolderRecyclerViewAdapter adapter = new FolderRecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(ImageFolderActivity.this,RecyclerView.VERTICAL,false));
@@ -35,23 +38,23 @@ public class ImageFolderActivity extends AppCompatActivity implements FolderRecy
 
     @Override
     public int getCount() {
-        if(MainActivity.getImageFolderList() == null){
+        if(folderImageList == null){
             return 0;
         } else {
-            MainActivity.getImageFolderList().size();
+            folderImageList.size();
         }
-        return MainActivity.getImageFolderList().size();
+        return folderImageList.size();
     }
 
     @Override
     public String file(int position) {
-        return MainActivity.getImageFolderList().get(position);
+        return folderImageList.get(position);
     }
 
     @Override
     public void onClickItem(int position) {
-        int indexPath = MainActivity.getImageFolderList().get(position).lastIndexOf("/");
-        String nameOFFolder = MainActivity.getImageFolderList().get(position).substring(indexPath+1);
+        int indexPath = folderImageList.get(position).lastIndexOf("/");
+        String nameOFFolder = folderImageList.get(position).substring(indexPath+1);
         Intent intent = new Intent(this, ImageFilesActivity.class);
         intent.putExtra("folderName",nameOFFolder);
         startActivity(intent);

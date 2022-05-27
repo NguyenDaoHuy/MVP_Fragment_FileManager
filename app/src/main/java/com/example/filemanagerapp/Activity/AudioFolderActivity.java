@@ -12,10 +12,12 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.TextView;
 import com.example.filemanagerapp.Adapter.FolderRecyclerViewAdapter;
-import com.example.filemanagerapp.MainActivity;
 import com.example.filemanagerapp.R;
 
+import java.util.ArrayList;
+
 public class AudioFolderActivity extends AppCompatActivity implements FolderRecyclerViewAdapter.FolderInterface {
+    private ArrayList<String> folderAudioList;
     @SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +31,8 @@ public class AudioFolderActivity extends AppCompatActivity implements FolderRecy
             Uri uri = Uri.fromParts("package",getPackageName(),null);
             intent.setData(uri);
         }
-        if(MainActivity.getItemAudioArrayList().size() == 0){
-            tvThongBao.setText("Không có dữ liệu");
-        }
+        folderAudioList = getIntent().getExtras().getStringArrayList("folderAudioList");
+
         FolderRecyclerViewAdapter adapter = new FolderRecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(AudioFolderActivity.this,RecyclerView.VERTICAL,false));
@@ -40,23 +41,23 @@ public class AudioFolderActivity extends AppCompatActivity implements FolderRecy
 
     @Override
     public int getCount() {
-        if(MainActivity.getAudioFolderList() == null){
+        if(folderAudioList == null){
             return 0;
         } else {
-            MainActivity.getAudioFolderList().size();
+            folderAudioList.size();
         }
-        return MainActivity.getAudioFolderList().size();
+        return folderAudioList.size();
     }
 
     @Override
     public String file(int position) {
-        return MainActivity.getAudioFolderList().get(position);
+        return folderAudioList.get(position);
     }
 
     @Override
     public void onClickItem(int position) {
-        int indexPath = MainActivity.getAudioFolderList().get(position).lastIndexOf("/");
-        String nameOFFolder = MainActivity.getAudioFolderList().get(position).substring(indexPath+1);
+        int indexPath = folderAudioList.get(position).lastIndexOf("/");
+        String nameOFFolder = folderAudioList.get(position).substring(indexPath+1);
         Intent intent = new Intent(this, AudioFilesActivity.class);
         intent.putExtra("folderName",nameOFFolder);
         startActivity(intent);

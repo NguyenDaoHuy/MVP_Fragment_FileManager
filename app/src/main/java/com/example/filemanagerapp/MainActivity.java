@@ -48,14 +48,14 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.C
     private static final int STORAGE_PERMISSION = 100;
     private static final String TAG = "PERMISSON_TAG";
     private ArrayList<Category> categoryArrayList;
-    private static final ArrayList<Item> itemDocumentsArrayList = new ArrayList<>();
-    private static final ArrayList<Item> itemNewFileArrayList = new ArrayList<>();
-    private static final ArrayList<FileItem> itemImageArrayList = new ArrayList<>();
-    private static final ArrayList<String> imageFolderList = new ArrayList<>();
-    private static final ArrayList<FileItem> itemVideoArrayList = new ArrayList<>();
-    private static final ArrayList<String> videoFolderList = new ArrayList<>();
-    private static final ArrayList<FileItem> itemAudioArrayList = new ArrayList<>();
-    private static final ArrayList<String> audioFolderList = new ArrayList<>();
+    private final ArrayList<Item> itemDocumentsArrayList = new ArrayList<>();
+    private final ArrayList<Item> itemNewFileArrayList = new ArrayList<>();
+    private final ArrayList<FileItem> itemImageArrayList = new ArrayList<>();
+    private final ArrayList<String> imageFolderList = new ArrayList<>();
+    private final ArrayList<FileItem> itemVideoArrayList = new ArrayList<>();
+    private final ArrayList<String> videoFolderList = new ArrayList<>();
+    private final ArrayList<FileItem> itemAudioArrayList = new ArrayList<>();
+    private final ArrayList<String> audioFolderList = new ArrayList<>();
     private final Activity mActivity = MainActivity.this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,21 +196,36 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.C
         int id = category.getId();
         if(id == 1){
             Intent intent = new Intent(this, ImageFolderActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putStringArrayList("folderImageList", imageFolderList);
+            intent.putExtras(bundle);
             this.startActivity(intent);
         }else if(id == 2){
             Intent intent = new Intent(this, AudioFolderActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putStringArrayList("folderAudioList", audioFolderList);
+            intent.putExtras(bundle);
             this.startActivity(intent);
         }else if(id == 3){
             Intent intent = new Intent(this, VideoFolderActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putStringArrayList("folderVideoList", videoFolderList);
+            intent.putExtras(bundle);
             this.startActivity(intent);
         }else if(id == 4){
             Intent intent = new Intent(this, DocumentsFileActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("folderDocumentsList",itemDocumentsArrayList);
+            intent.putExtras(bundle);
             this.startActivity(intent);
         }else if(id == 5){
             Intent intent = new Intent(this, ListAppActivity.class);
             this.startActivity(intent);
         }else if(id == 6){
             Intent intent = new Intent(this, NewFilesActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("folderNewFilesList",itemNewFileArrayList);
+            intent.putExtras(bundle);
             this.startActivity(intent);
         }else if(id == 7){
             Toast.makeText(this,"Not data",Toast.LENGTH_SHORT).show();
@@ -225,7 +240,6 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.C
         int monthNow = Calendar.getInstance().get(Calendar.MONTH) +1;
         int yearNow = Calendar.getInstance().get(Calendar.YEAR);
         try{
-            assert listFile != null;
             if (listFile.length > 0) {
                 for (File file : listFile) {
                     if (file.isDirectory()) {
@@ -326,28 +340,5 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.C
             }while (cursor.moveToNext());
 
         }
-    }
-    public static ArrayList<Item> getArrayItemDocuments(){
-        return itemDocumentsArrayList;
-    }
-
-    public static ArrayList<Item> getItemNewFileArrayList() {
-        return itemNewFileArrayList;
-    }
-
-    public static ArrayList<String> getImageFolderList() {
-        return imageFolderList;
-    }
-
-    public static ArrayList<String> getVideoFolderList() {
-        return videoFolderList;
-    }
-
-    public static ArrayList<FileItem> getItemAudioArrayList() {
-        return itemAudioArrayList;
-    }
-
-    public static ArrayList<String> getAudioFolderList() {
-        return audioFolderList;
     }
 }

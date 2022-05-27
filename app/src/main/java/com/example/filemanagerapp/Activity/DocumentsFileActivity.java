@@ -9,12 +9,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import com.example.filemanagerapp.Adapter.DocumentsFilesAdapter;
-import com.example.filemanagerapp.MainActivity;
 import com.example.filemanagerapp.Model.Item;
 import com.example.filemanagerapp.R;
 import java.io.File;
+import java.util.ArrayList;
 
 public class DocumentsFileActivity extends AppCompatActivity implements DocumentsFilesAdapter.DocumentFileInterface {
+    ArrayList<Item> folderDocumentsList;
     private RecyclerView recyclerView;
 
     @Override
@@ -22,6 +23,7 @@ public class DocumentsFileActivity extends AppCompatActivity implements Document
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_documents_file);
         recyclerView = findViewById(R.id.rvDocuments);
+        folderDocumentsList = getIntent().getExtras().getParcelableArrayList("folderDocumentsList");
         showDocuments();
     }
     @SuppressLint("NotifyDataSetChanged")
@@ -34,17 +36,17 @@ public class DocumentsFileActivity extends AppCompatActivity implements Document
 
     @Override
     public int getCount() {
-        if(MainActivity.getArrayItemDocuments() == null){
+        if(folderDocumentsList == null){
             return 0;
         } else {
-            MainActivity.getArrayItemDocuments().size();
+            folderDocumentsList.size();
         }
-        return MainActivity.getArrayItemDocuments().size();
+        return folderDocumentsList.size();
     }
 
     @Override
     public Item item(int position) {
-        return MainActivity.getArrayItemDocuments().get(position);
+        return folderDocumentsList.get(position);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class DocumentsFileActivity extends AppCompatActivity implements Document
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setAction(Intent.ACTION_VIEW);
-        File file = new File(MainActivity.getArrayItemDocuments().get(position).getPath());
+        File file = new File(folderDocumentsList.get(position).getPath());
         String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
         String mimetype = android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         Uri photoURI = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);

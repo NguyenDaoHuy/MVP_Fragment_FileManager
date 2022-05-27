@@ -11,29 +11,27 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.widget.TextView;
 import com.example.filemanagerapp.Adapter.FolderRecyclerViewAdapter;
-import com.example.filemanagerapp.MainActivity;
 import com.example.filemanagerapp.R;
+
+import java.util.ArrayList;
 
 public class VideoFolderActivity extends AppCompatActivity implements FolderRecyclerViewAdapter.FolderInterface {
 
+    private ArrayList<String> folderVideoList;
     @SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_folder);
         RecyclerView recyclerView = findViewById(R.id.lvFolderVideo);
-        TextView tvThongBao = findViewById(R.id.tvThongBao);
         if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_DENIED){
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             Uri uri = Uri.fromParts("package",getPackageName(),null);
             intent.setData(uri);
         }
-        if(MainActivity.getVideoFolderList().size() == 0){
-            tvThongBao.setText("Không có dữ liệu");
-        }
+        folderVideoList = getIntent().getExtras().getStringArrayList("folderVideoList");
         FolderRecyclerViewAdapter adapter = new FolderRecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(VideoFolderActivity.this,RecyclerView.VERTICAL,false));
@@ -42,23 +40,23 @@ public class VideoFolderActivity extends AppCompatActivity implements FolderRecy
 
     @Override
     public int getCount() {
-        if(MainActivity.getVideoFolderList() == null){
+        if(folderVideoList == null){
             return 0;
         } else {
-            MainActivity.getVideoFolderList().size();
+            folderVideoList.size();
         }
-        return MainActivity.getVideoFolderList().size();
+        return folderVideoList.size();
     }
 
     @Override
     public String file(int position) {
-        return MainActivity.getVideoFolderList().get(position);
+        return folderVideoList.get(position);
     }
 
     @Override
     public void onClickItem(int position) {
-        int indexPath = MainActivity.getVideoFolderList().get(position).lastIndexOf("/");
-        String nameOFFolder = MainActivity.getVideoFolderList().get(position).substring(indexPath+1);
+        int indexPath = folderVideoList.get(position).lastIndexOf("/");
+        String nameOFFolder = folderVideoList.get(position).substring(indexPath+1);
         Intent intent = new Intent(this, VideoFilesActivity.class);
         intent.putExtra("folderName",nameOFFolder);
         startActivity(intent);
