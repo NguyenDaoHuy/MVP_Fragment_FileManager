@@ -6,9 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.filemanagerapp.Activity.AudioPlayerActivity;
-import com.example.filemanagerapp.Model.FileItem;
+import com.example.filemanagerapp.databinding.AudioItemBinding;
+import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
 
 public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.ViewHolder> {
@@ -22,18 +24,16 @@ public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.audio_item,parent,false);
-        return new ViewHolder(view);
+         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+         AudioItemBinding binding = DataBindingUtil.inflate(layoutInflater,R.layout.audio_item,parent,false);
+         return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         FileItem v = audioFileInterface.audio(position);
-        holder.audioName.setText(v.getDisplayName());
-        String size = v.getSize();
-        holder.audio_size.setText(android.text.format.Formatter.formatFileSize(audioFileInterface.context(),
-                Long.parseLong(size)));
-        holder.tvTimeAudio.setText(AudioPlayerActivity.convertToMMSS(v.getDuration()));
+        holder.binding.setFileitem(v);
+        holder.binding.executePendingBindings();
         holder.itemView.setOnClickListener(v1 -> audioFileInterface.onClickItem(position));
     }
 
@@ -43,14 +43,10 @@ public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView audioName;
-        private final TextView audio_size;
-        private final TextView tvTimeAudio;
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            audioName = itemView.findViewById(R.id.audioName);
-            audio_size = itemView.findViewById(R.id.audio_size);
-            tvTimeAudio = itemView.findViewById(R.id.tvTimeAudio);
+        AudioItemBinding binding;
+        public ViewHolder(@NonNull AudioItemBinding binding) {
+            super(binding.getRoot());
+            this.binding=binding;
         }
     }
 

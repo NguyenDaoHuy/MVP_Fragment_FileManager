@@ -2,6 +2,7 @@ package com.example.filemanagerapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
@@ -9,28 +10,28 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import com.example.filemanagerapp.Adapter.DocumentsFilesAdapter;
-import com.example.filemanagerapp.Model.Item;
+import com.example.filemanagerapp.databinding.ActivityDocumentsFileBinding;
+import com.example.filemanagerapp.model.Item;
 import com.example.filemanagerapp.R;
 import java.io.File;
 import java.util.ArrayList;
 
 public class DocumentsFileActivity extends AppCompatActivity implements DocumentsFilesAdapter.DocumentFileInterface {
     ArrayList<Item> folderDocumentsList;
-    private RecyclerView recyclerView;
+    private ActivityDocumentsFileBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_documents_file);
-        recyclerView = findViewById(R.id.rvDocuments);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_documents_file);
         folderDocumentsList = getIntent().getExtras().getParcelableArrayList("folderDocumentsList");
         showDocuments();
     }
     @SuppressLint("NotifyDataSetChanged")
     private void showDocuments(){
         DocumentsFilesAdapter adapter = new DocumentsFilesAdapter(this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
+        binding.rvDocuments.setAdapter(adapter);
+        binding.rvDocuments.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
         adapter.notifyDataSetChanged();
     }
 

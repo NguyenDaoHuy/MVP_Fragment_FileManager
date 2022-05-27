@@ -7,8 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.filemanagerapp.Model.Item;
+
+import com.example.filemanagerapp.databinding.FolderItemDocumentsBinding;
+import com.example.filemanagerapp.model.Item;
 import com.example.filemanagerapp.R;
 
 
@@ -23,29 +26,30 @@ public class DocumentsFilesAdapter extends RecyclerView.Adapter<DocumentsFilesAd
     @NonNull
     @Override
     public DocumentsFilesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.folder_item,parent,false);
-        return new ViewHolder(view);
+          LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+          FolderItemDocumentsBinding folderItemDocumentsBinding = DataBindingUtil.inflate(layoutInflater,R.layout.folder_item_documents,parent,false);
+          return new ViewHolder(folderItemDocumentsBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Item i = documentFileInterface.item(position);
-        holder.documentsName.setText(i.getName());
-        holder.documentsPath.setText(i.getPath());
+        holder.folderItemDocumentsBinding.setItem(i);
+        holder.folderItemDocumentsBinding.executePendingBindings();
         if(i.getName().endsWith(".docx")){
-            holder.imgFolder.setImageResource(R.drawable.icon_word);
+            holder.folderItemDocumentsBinding.imgDocuments.setImageResource(R.drawable.icon_word);
         }else if(i.getName().endsWith(".txt")){
-            holder.imgFolder.setImageResource(R.drawable.icon_txt);
+            holder.folderItemDocumentsBinding.imgDocuments.setImageResource(R.drawable.icon_txt);
         }else if(i.getName().endsWith(".xls")){
-            holder.imgFolder.setImageResource(R.drawable.icon_exel);
+            holder.folderItemDocumentsBinding.imgDocuments.setImageResource(R.drawable.icon_exel);
         }else if(i.getName().endsWith(".pdf")){
-            holder.imgFolder.setImageResource(R.drawable.icon_pdf);
+            holder.folderItemDocumentsBinding.imgDocuments.setImageResource(R.drawable.icon_pdf);
         }else if(i.getName().endsWith(".pptx")){
-            holder.imgFolder.setImageResource(R.drawable.icon_ppt);
+            holder.folderItemDocumentsBinding.imgDocuments.setImageResource(R.drawable.icon_ppt);
         }else if(i.getName().endsWith(".mp3")){
-            holder.imgFolder.setImageResource(R.drawable.icons8_sing);
+            holder.folderItemDocumentsBinding.imgDocuments.setImageResource(R.drawable.icons8_sing);
         }else if(i.getName().endsWith(".jpg")){
-            holder.imgFolder.setImageBitmap(BitmapFactory.decodeFile(i.getPath()));
+            holder.folderItemDocumentsBinding.imgDocuments.setImageBitmap(BitmapFactory.decodeFile(i.getPath()));
         }
 
         holder.itemView.setOnClickListener(v -> documentFileInterface.onClickItem(position));
@@ -57,14 +61,10 @@ public class DocumentsFilesAdapter extends RecyclerView.Adapter<DocumentsFilesAd
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        private final TextView documentsName;
-        private final TextView documentsPath;
-        private final ImageView imgFolder;
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            documentsName = itemView.findViewById(R.id.folderName);
-            documentsPath = itemView.findViewById(R.id.folderPath);
-            imgFolder = itemView.findViewById(R.id.imgFolder);
+        FolderItemDocumentsBinding folderItemDocumentsBinding;
+        public ViewHolder(@NonNull FolderItemDocumentsBinding folderItemDocumentsBinding) {
+            super(folderItemDocumentsBinding.getRoot());
+            this.folderItemDocumentsBinding = folderItemDocumentsBinding;
         }
     }
     public interface DocumentFileInterface{

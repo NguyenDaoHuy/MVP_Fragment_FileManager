@@ -5,8 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.filemanagerapp.R;
+import com.example.filemanagerapp.databinding.FolderItemBinding;
 
 public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecyclerViewAdapter.ViewHolder> {
 
@@ -19,16 +21,17 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
     @NonNull
     @Override
     public FolderRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.folder_item,parent,false);
-        return new ViewHolder(view);
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        FolderItemBinding binding = DataBindingUtil.inflate(layoutInflater,R.layout.folder_item,parent,false);
+        return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         int indexPath = imageFolderInterface.file(position).lastIndexOf("/");
         String nameOFFolder = imageFolderInterface.file(position).substring(indexPath+1);
-        holder.folderName.setText(nameOFFolder);
-        holder.folderPath.setText(imageFolderInterface.file(position));
+        holder.binding.folderName.setText(nameOFFolder);
+        holder.binding.folderPath.setText(imageFolderInterface.file(position));
 
         holder.itemView.setOnClickListener(v -> imageFolderInterface.onClickItem(position));
     }
@@ -38,12 +41,10 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        private final TextView folderName;
-        private final TextView folderPath;
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            folderName = itemView.findViewById(R.id.folderName);
-            folderPath = itemView.findViewById(R.id.folderPath);
+        FolderItemBinding binding;
+        public ViewHolder(@NonNull FolderItemBinding binding) {
+            super(binding.getRoot());
+            this.binding=binding;
         }
     }
     public interface FolderInterface{

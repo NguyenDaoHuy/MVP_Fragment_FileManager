@@ -1,6 +1,7 @@
 package com.example.filemanagerapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
@@ -13,18 +14,18 @@ import android.provider.Settings;
 import android.widget.TextView;
 import com.example.filemanagerapp.Adapter.FolderRecyclerViewAdapter;
 import com.example.filemanagerapp.R;
+import com.example.filemanagerapp.databinding.ActivityAudioFolderBinding;
 
 import java.util.ArrayList;
 
 public class AudioFolderActivity extends AppCompatActivity implements FolderRecyclerViewAdapter.FolderInterface {
     private ArrayList<String> folderAudioList;
+    private ActivityAudioFolderBinding binding;
     @SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_audio_folder);
-        RecyclerView recyclerView = findViewById(R.id.lvFolderAudio);
-        TextView tvThongBao = findViewById(R.id.tvThongBaoAudio);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_audio_folder);
         if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_DENIED){
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -34,8 +35,8 @@ public class AudioFolderActivity extends AppCompatActivity implements FolderRecy
         folderAudioList = getIntent().getExtras().getStringArrayList("folderAudioList");
 
         FolderRecyclerViewAdapter adapter = new FolderRecyclerViewAdapter(this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(AudioFolderActivity.this,RecyclerView.VERTICAL,false));
+        binding.lvFolderAudio.setAdapter(adapter);
+        binding.lvFolderAudio.setLayoutManager(new LinearLayoutManager(AudioFolderActivity.this,RecyclerView.VERTICAL,false));
         adapter.notifyDataSetChanged();
     }
 

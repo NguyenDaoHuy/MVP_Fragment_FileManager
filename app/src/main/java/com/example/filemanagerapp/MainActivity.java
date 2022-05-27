@@ -24,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,16 +35,17 @@ import com.example.filemanagerapp.Activity.ListAppActivity;
 import com.example.filemanagerapp.Activity.NewFilesActivity;
 import com.example.filemanagerapp.Activity.VideoFolderActivity;
 import com.example.filemanagerapp.Adapter.CategoryAdapter;
-import com.example.filemanagerapp.Model.Category;
-import com.example.filemanagerapp.Model.FileItem;
-import com.example.filemanagerapp.Model.Item;
+import com.example.filemanagerapp.model.Category;
+import com.example.filemanagerapp.model.FileItem;
+import com.example.filemanagerapp.model.Item;
+import com.example.filemanagerapp.databinding.ActivityMainBinding;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements CategoryAdapter.CategoryInterFace {
+public class    MainActivity extends AppCompatActivity implements CategoryAdapter.CategoryInterFace {
     private static final int STORAGE_PERMISSION = 100;
     private static final String TAG = "PERMISSON_TAG";
     private ArrayList<Category> categoryArrayList;
@@ -57,12 +58,11 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.C
     private final ArrayList<FileItem> itemAudioArrayList = new ArrayList<>();
     private final ArrayList<String> audioFolderList = new ArrayList<>();
     private final Activity mActivity = MainActivity.this;
+    private ActivityMainBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        RecyclerView rvDanhMuc = findViewById(R.id.rvDanhMuc);
-        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
 
         if(checkPermission()){
 
@@ -78,8 +78,8 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.C
 
         Toolbar toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        binding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         File dir = new File(String.valueOf(Environment.getExternalStorageDirectory()));
@@ -100,8 +100,8 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.C
         categoryArrayList.add(new Category(9,"Access device",R.drawable.icons_remote,120));
         CategoryAdapter categoryAdapter = new CategoryAdapter(this);
         RecyclerView.LayoutManager layoutManager =new GridLayoutManager(getApplicationContext(),3,RecyclerView.VERTICAL,false);
-        rvDanhMuc.setLayoutManager(layoutManager);
-        rvDanhMuc.setAdapter(categoryAdapter);
+        binding.rvDanhMuc.setLayoutManager(layoutManager);
+        binding.rvDanhMuc.setAdapter(categoryAdapter);
     }
 
       private void requestPermission(){

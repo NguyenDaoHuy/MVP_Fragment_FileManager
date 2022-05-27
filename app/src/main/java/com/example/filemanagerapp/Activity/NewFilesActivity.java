@@ -6,10 +6,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.filemanagerapp.Adapter.DocumentsFilesAdapter;
-import com.example.filemanagerapp.Model.Item;
+import com.example.filemanagerapp.databinding.ActivityNewFilesBinding;
+import com.example.filemanagerapp.model.Item;
 import com.example.filemanagerapp.R;
 import java.io.File;
 import java.util.ArrayList;
@@ -18,17 +20,17 @@ import java.util.ArrayList;
 public class NewFilesActivity extends AppCompatActivity implements DocumentsFilesAdapter.DocumentFileInterface {
 
     private ArrayList<Item> folderNewFilesList;
+    private ActivityNewFilesBinding binding;
     @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_files);
-        RecyclerView recyclerView = findViewById(R.id.rvNewFile);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_new_files);
         folderNewFilesList = getIntent().getExtras().getParcelableArrayList("folderNewFilesList");
 
         DocumentsFilesAdapter adapter = new DocumentsFilesAdapter(this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
+        binding.rvNewFile.setAdapter(adapter);
+        binding.rvNewFile.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
         adapter.notifyDataSetChanged();
     }
 

@@ -14,11 +14,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.filemanagerapp.Adapter.ImageFilesAdapter;
 import com.example.filemanagerapp.Adapter.VideoFilesAdapter;
-import com.example.filemanagerapp.Model.FileItem;
+import com.example.filemanagerapp.databinding.ActivityImageBinding;
+import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -31,16 +33,17 @@ public class ImageFilesActivity extends AppCompatActivity implements ImageFilesA
     private ImageFilesAdapter imagesAdapter;
     private String folder_name;
     private BottomSheetDialog bottomSheetDialog;
+    private ActivityImageBinding binding;
+
     @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image);
-        RecyclerView recyclerView = findViewById(R.id.lvListItem);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_image);
         folder_name = getIntent().getStringExtra("folderName");
         imagesAdapter = new ImageFilesAdapter(this);
-        recyclerView.setAdapter(imagesAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,
+        binding.lvListItem.setAdapter(imagesAdapter);
+        binding.lvListItem.setLayoutManager(new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,false));
         imagesAdapter.notifyDataSetChanged();
         showImageFile();

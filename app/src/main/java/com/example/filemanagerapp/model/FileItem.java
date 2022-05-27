@@ -1,8 +1,17 @@
-package com.example.filemanagerapp.Model;
+package com.example.filemanagerapp.model;
 
+import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.databinding.BindingAdapter;
+
+import com.bumptech.glide.Glide;
+import com.example.filemanagerapp.Activity.AudioPlayerActivity;
+
+import java.io.File;
 import java.io.Serializable;
 
 public class FileItem implements Serializable, Parcelable {
@@ -100,5 +109,40 @@ public class FileItem implements Serializable, Parcelable {
         dest.writeString(duration);
         dest.writeString(path);
         dest.writeString(dateAdded);
+    }
+    @BindingAdapter("android:loadImageFile")
+    public static void loadImageFile(ImageView imgAnh,String path){
+        imgAnh.setImageBitmap(BitmapFactory.decodeFile(path));
+    }
+    @BindingAdapter("android:loadSizeFile")
+    public static void loadSizeFile(TextView sizeAnh, String size){
+        sizeAnh.setText(android.text.format.Formatter.formatFileSize(sizeAnh.getContext(),
+                Long.parseLong(size)));
+    }
+    @BindingAdapter("android:loadVideoDuration")
+    public static void loadVideoDuration(TextView video_duration, String duration){
+        double milliSeconds = Double.parseDouble(duration);
+        video_duration.setText(timeConversion((long) milliSeconds));
+    }
+    public static String timeConversion(long value){
+        String videoTime;
+        int duration = (int) value;
+        int hrs = (duration/3600000);
+        int mns = (duration/60000) % 60000;
+        int scs = duration%60000/1000;
+        if(hrs > 0){
+            videoTime = String.format("%02d:%02d:%02d",hrs,mns,scs);
+        }else {
+            videoTime = String.format("%02d:%02d",mns,scs);
+        }
+        return videoTime;
+    }
+    @BindingAdapter("android:loadVideoImage")
+    public static void loadVideoImage(ImageView thumbnail, String path){
+        Glide.with(thumbnail.getContext()).load(new File(path)).into(thumbnail);
+    }
+    @BindingAdapter("android:loadAudioTime")
+    public static void loadAudioTime(TextView tvTimeAudio, String duration){
+        tvTimeAudio.setText(AudioPlayerActivity.convertToMMSS(duration));
     }
 }

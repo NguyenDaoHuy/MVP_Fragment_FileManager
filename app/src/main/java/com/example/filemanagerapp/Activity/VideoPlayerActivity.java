@@ -7,8 +7,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
-import com.example.filemanagerapp.Model.FileItem;
+import com.example.filemanagerapp.databinding.ActivityVideoPlayerBinding;
+import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -26,16 +28,15 @@ import java.util.ArrayList;
 
 public class VideoPlayerActivity extends AppCompatActivity {
 
-    private PlayerView playerView;
     private SimpleExoPlayer player;
     private int position;
     private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
     private final MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();
+    private ActivityVideoPlayerBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_player);
-        playerView = findViewById(R.id.exoplayer_view);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_video_player);
         position = getIntent().getIntExtra("position",1);
         fileItemArrayList = getIntent().getExtras().getParcelableArrayList("videoArrayList");
 
@@ -56,8 +57,8 @@ public class VideoPlayerActivity extends AppCompatActivity {
                     .createMediaSource(Uri.parse(String.valueOf(uri)));
             concatenatingMediaSource.addMediaSource(mediaSource);
         }
-        playerView.setPlayer(player);
-        playerView.setKeepScreenOn(true);
+        binding.exoplayerView.setPlayer(player);
+        binding.exoplayerView.setKeepScreenOn(true);
         player.prepare(concatenatingMediaSource);
         player.seekTo(position, C.TIME_UNSET);
         playError();

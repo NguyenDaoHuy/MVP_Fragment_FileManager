@@ -8,7 +8,10 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.filemanagerapp.Model.FileItem;
+import androidx.databinding.DataBindingUtil;
+
+import com.example.filemanagerapp.databinding.ActivityAudioPlayerBinding;
+import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,25 +19,17 @@ import java.util.concurrent.TimeUnit;
 
 public class AudioPlayerActivity extends AppCompatActivity {
 
-    private TextView audio_name,current_time,total_time;
-    private SeekBar seek_bar;
-    private ImageView next,pause_play,previous;
+
     private ArrayList<FileItem> audioArrayList;
     private FileItem audio;
     private final MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();
+    private ActivityAudioPlayerBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_audio_player);
-        audio_name = findViewById(R.id.audio_name);
-        current_time = findViewById(R.id.current_time);
-        total_time = findViewById(R.id.total_time);
-        seek_bar = findViewById(R.id.seek_bar);
-        next = findViewById(R.id.next);
-        pause_play = findViewById(R.id.pause_play);
-        previous = findViewById(R.id.previous);
-        audio_name.setSelected(true);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_audio_player);
+        binding.audioName.setSelected(true);
 
         audioArrayList = (ArrayList<FileItem>) getIntent().getSerializableExtra("LIST");
         setResourcesWithMusic();
@@ -42,18 +37,18 @@ public class AudioPlayerActivity extends AppCompatActivity {
             @Override
             public void run() {
                  if(mediaPlayer != null){
-                     seek_bar.setProgress(mediaPlayer.getCurrentPosition());
-                     current_time.setText(convertToMMSS(mediaPlayer.getCurrentPosition()+""));
+                     binding.seekBar.setProgress(mediaPlayer.getCurrentPosition());
+                     binding.currentTime.setText(convertToMMSS(mediaPlayer.getCurrentPosition()+""));
                      if(mediaPlayer.isPlaying()){
-                         pause_play.setImageResource(R.drawable.exo_icon_pause);
+                         binding.pausePlay.setImageResource(R.drawable.exo_icon_pause);
                      }else {
-                         pause_play.setImageResource(R.drawable.ic_play);
+                         binding.pausePlay.setImageResource(R.drawable.ic_play);
                      }
                  }
                  new Handler().postDelayed(this,100);
             }
         });
-        seek_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if(mediaPlayer != null && fromUser){
@@ -75,12 +70,12 @@ public class AudioPlayerActivity extends AppCompatActivity {
 
     private void setResourcesWithMusic() {
         audio = audioArrayList.get(MyMediaPlayer.currentIndex);
-        audio_name.setText(audio.getDisplayName());
-        total_time.setText(convertToMMSS(audio.getDuration()));
+        binding.audioName.setText(audio.getDisplayName());
+        binding.totalTime.setText(convertToMMSS(audio.getDuration()));
         playMusic();
-        next.setOnClickListener(v -> nextMusic());
-        previous.setOnClickListener(v -> previousMusic());
-        pause_play.setOnClickListener(v -> pauseMusic());
+        binding.next.setOnClickListener(v -> nextMusic());
+        binding.previous.setOnClickListener(v -> previousMusic());
+        binding.pausePlay.setOnClickListener(v -> pauseMusic());
     }
     private void playMusic(){
         mediaPlayer.reset();
@@ -88,8 +83,8 @@ public class AudioPlayerActivity extends AppCompatActivity {
             mediaPlayer.setDataSource(audio.getPath());
             mediaPlayer.prepare();
             mediaPlayer.start();
-            seek_bar.setProgress(0);
-            seek_bar.setMax(mediaPlayer.getDuration());
+            binding.seekBar.setProgress(0);
+            binding.seekBar.setMax(mediaPlayer.getDuration());
         } catch (IOException e) {
             e.printStackTrace();
         }

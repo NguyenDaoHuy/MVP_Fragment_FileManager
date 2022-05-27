@@ -9,8 +9,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.filemanagerapp.Model.FileItem;
+
+import com.example.filemanagerapp.databinding.ItemListFilesBinding;
+import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
 
 public class ImageFilesAdapter extends RecyclerView.Adapter<ImageFilesAdapter.ViewHolder> {
@@ -24,19 +27,17 @@ public class ImageFilesAdapter extends RecyclerView.Adapter<ImageFilesAdapter.Vi
     @NonNull
     @Override
     public ImageFilesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_files,parent,false);
-        return new ViewHolder(view);
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        ItemListFilesBinding binding = DataBindingUtil.inflate(layoutInflater,R.layout.item_list_files,parent,false);
+        return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         FileItem image = imageFilesInterface.image(position);
-        holder.imgAnh.setImageBitmap(BitmapFactory.decodeFile(image.getPath()));
-        holder.tenAnh.setText(image.getDisplayName());
-        String size = image.getSize();
-        holder.sizeAnh.setText(android.text.format.Formatter.formatFileSize(imageFilesInterface.context(),
-                Long.parseLong(size)));
-        holder.btnMenu.setOnClickListener(v -> imageFilesInterface.onClickMenu(position));
+        holder.binding.setFileitem(image);
+        holder.binding.executePendingBindings();
+        holder.binding.btnMenu.setOnClickListener(v -> imageFilesInterface.onClickMenu(position));
         holder.itemView.setOnClickListener(v -> imageFilesInterface.onClickItem(position));
         holder.itemView.setOnLongClickListener(v -> imageFilesInterface.onLongClickItem(position,v));
     }
@@ -47,16 +48,10 @@ public class ImageFilesAdapter extends RecyclerView.Adapter<ImageFilesAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        RelativeLayout item_image;
-        ImageView btnMenu,imgAnh;
-        TextView tenAnh,sizeAnh;
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            item_image = itemView.findViewById(R.id.item_image);
-            btnMenu = itemView.findViewById(R.id.btnMenu);
-            imgAnh =itemView.findViewById(R.id.imgAnh);
-            tenAnh = itemView.findViewById(R.id.tenAnh);
-            sizeAnh = itemView.findViewById(R.id.sizeAnh);
+        ItemListFilesBinding binding;
+        public ViewHolder(@NonNull ItemListFilesBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
     public interface ImageFilesInterface{

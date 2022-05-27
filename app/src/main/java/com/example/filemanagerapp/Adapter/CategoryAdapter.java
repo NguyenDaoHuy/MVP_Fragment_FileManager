@@ -1,22 +1,19 @@
 package com.example.filemanagerapp.Adapter;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.filemanagerapp.Model.Category;
+import com.example.filemanagerapp.model.Category;
 import com.example.filemanagerapp.R;
+import com.example.filemanagerapp.databinding.ItemDanhMucBinding;
 
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHoder> {
 
-    private final CategoryInterFace categoryInterFace;
-    private ImageView icon_logo;
-    private TextView tvTenDanhMuc,tvDungLuong;
+    private final CategoryInterFace categoryInterFace;;
 
     public CategoryAdapter(CategoryInterFace categoryInterFace) {
         this.categoryInterFace = categoryInterFace;
@@ -25,19 +22,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @NonNull
     @Override
     public CategoryAdapter.ViewHoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater =LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.item_danh_muc,parent,false);
-        return new ViewHoder(view);
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        ItemDanhMucBinding itemDanhMucBinding = DataBindingUtil.inflate(layoutInflater,R.layout.item_danh_muc,parent,false);
+        return new ViewHoder(itemDanhMucBinding);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHoder holder, int position) {
-       Category category = categoryInterFace.category(position);
-       icon_logo.setImageResource(category.getIcon());
-       tvTenDanhMuc.setText(category.getName());
-       String dungLuong = String.valueOf(category.getStorage());
-       tvDungLuong.setText(dungLuong + " item");
+        Category category = categoryInterFace.category(position);
+        holder.itemDanhMucBinding.setCategory(category);
+        holder.itemDanhMucBinding.executePendingBindings();
         holder.itemView.setOnClickListener(v -> categoryInterFace.onClickItem(position));
     }
 
@@ -47,11 +41,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     }
 
     public class ViewHoder extends RecyclerView.ViewHolder{
-           public ViewHoder(@NonNull View view){
-                super(view);
-                icon_logo = view.findViewById(R.id.icon_logo);
-                tvTenDanhMuc = view.findViewById(R.id.tvTenDanhMuc);
-                tvDungLuong = view.findViewById(R.id.tvDungLuong);
+           ItemDanhMucBinding itemDanhMucBinding;
+           public ViewHoder(@NonNull ItemDanhMucBinding itemDanhMucBinding){
+                super(itemDanhMucBinding.getRoot());
+                this.itemDanhMucBinding = itemDanhMucBinding;
            }
     }
     public interface CategoryInterFace {

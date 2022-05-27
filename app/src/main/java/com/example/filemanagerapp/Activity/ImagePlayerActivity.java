@@ -1,6 +1,8 @@
 package com.example.filemanagerapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,7 +11,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
-import com.example.filemanagerapp.Model.FileItem;
+
+import com.example.filemanagerapp.databinding.ActivityDetailBinding;
+import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,19 +21,13 @@ import java.util.Date;
 
 public class ImagePlayerActivity extends AppCompatActivity {
 
-    private ImageView imgView;
-    private ImageView btnShare;
+    ActivityDetailBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
-        imgView = findViewById(R.id.imgView);
-        ImageView btnScreenshot = findViewById(R.id.btnScreenshot);
-        btnShare = findViewById(R.id.btnShare);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_detail);
         getDataImage();
-      //  verifyStoragePermission(this);
-        btnScreenshot.setOnClickListener(v -> {
-         //    takeScreenShot(getWindow().getDecorView().getRootView(),"result");
+        binding.btnScreenshot.setOnClickListener(v -> {
             takeScreenshot();
         });
         shareButton();
@@ -37,10 +35,10 @@ public class ImagePlayerActivity extends AppCompatActivity {
     private void getDataImage(){
         FileItem fileDevices = (FileItem) getIntent().getSerializableExtra("anh");
         String str = fileDevices.getPath();
-        imgView.setImageBitmap(BitmapFactory.decodeFile(str));
+        binding.imgView.setImageBitmap(BitmapFactory.decodeFile(str));
     }
     private void shareButton(){
-        btnShare.setOnClickListener(v -> {
+        binding.btnShare.setOnClickListener(v -> {
              Intent intent = new Intent(Intent.ACTION_SEND);
              intent.setType("text/plain");
              String body = "Download this file";

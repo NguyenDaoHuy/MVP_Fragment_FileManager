@@ -1,25 +1,25 @@
 package com.example.filemanagerapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import android.annotation.SuppressLint;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import com.example.filemanagerapp.R;
+import com.example.filemanagerapp.databinding.ActivityListAppBinding;
+
 import java.util.List;
 
 public class ListAppActivity extends AppCompatActivity {
 
-    private ListView lvApp;
-
+    private ActivityListAppBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_app);
-        lvApp = findViewById(R.id.lvApp);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_list_app);
         InstalledApps();
     }
     private void InstalledApps() {
@@ -28,7 +28,7 @@ public class ListAppActivity extends AppCompatActivity {
             PackageInfo packageInfo = list.get(i);
             if((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0){
                 ArrayAdapter<PackageInfo> arrayAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, list);
-                lvApp.setAdapter(arrayAdapter);
+                binding.lvApp.setAdapter(arrayAdapter);
             }
         }
     }

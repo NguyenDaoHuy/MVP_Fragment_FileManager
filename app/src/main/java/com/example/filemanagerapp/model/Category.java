@@ -1,6 +1,9 @@
-package com.example.filemanagerapp.Model;
+package com.example.filemanagerapp.model;
+
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.BindingAdapter;
 
 import java.io.Serializable;
 
@@ -50,5 +53,9 @@ public class Category implements Serializable{
                 ", icon=" + icon +
                 ", storage=" + storage +
                 '}';
+    }
+    @BindingAdapter("android:loadImage")
+    public static void loadImage(ImageView icon_logo, int icon){
+        icon_logo.setImageResource(icon);
     }
 }

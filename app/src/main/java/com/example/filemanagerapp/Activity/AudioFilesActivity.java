@@ -1,6 +1,7 @@
 package com.example.filemanagerapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
@@ -11,21 +12,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import com.example.filemanagerapp.Adapter.AudioFilesAdapter;
-import com.example.filemanagerapp.Model.FileItem;
+import com.example.filemanagerapp.databinding.ActivityAudioBinding;
+import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
 import java.util.ArrayList;
 
 public class AudioFilesActivity extends AppCompatActivity implements AudioFilesAdapter.AudioFileInterface {
 
-    private RecyclerView recyclerView;
     private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
     private String folder_name;
-
+    private ActivityAudioBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_audio);
-        recyclerView = findViewById(R.id.audio_rv);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_audio);
         folder_name = getIntent().getStringExtra("folderName");
         showVideoFile();
     }
@@ -33,8 +33,8 @@ public class AudioFilesActivity extends AppCompatActivity implements AudioFilesA
     private void showVideoFile() {
         fileItemArrayList = fetchMedia(folder_name);
         AudioFilesAdapter audioFilesAdapter = new AudioFilesAdapter(this);
-        recyclerView.setAdapter(audioFilesAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,
+        binding.audioRv.setAdapter(audioFilesAdapter);
+        binding.audioRv.setLayoutManager(new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,false));
         audioFilesAdapter.notifyDataSetChanged();
     }
@@ -64,8 +64,8 @@ public class AudioFilesActivity extends AppCompatActivity implements AudioFilesA
     @Override
     protected void onResume() {
         super.onResume();
-        if(recyclerView!=null){
-            recyclerView.setAdapter(new AudioFilesAdapter(this));
+        if(binding.audioRv!=null){
+            binding.audioRv.setAdapter(new AudioFilesAdapter(this));
         }
     }
 

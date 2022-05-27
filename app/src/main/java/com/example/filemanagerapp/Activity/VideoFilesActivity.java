@@ -15,11 +15,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.filemanagerapp.Adapter.VideoFilesAdapter;
-import com.example.filemanagerapp.Model.FileItem;
+import com.example.filemanagerapp.databinding.ActivityVideoFilesBinding;
+import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -28,17 +30,16 @@ import java.util.ArrayList;
 
 public class VideoFilesActivity extends AppCompatActivity implements VideoFilesAdapter.VideoFilesInterface {
 
-    private RecyclerView recyclerView;
     private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
     private VideoFilesAdapter videoFilesAdapter;
     private String folder_name;
     private BottomSheetDialog bottomSheetDialog;
+    private ActivityVideoFilesBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_files);
-        recyclerView = findViewById(R.id.video_rv);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_video_files);
         folder_name = getIntent().getStringExtra("folderName");
         showVideoFile();
     }
@@ -47,8 +48,8 @@ public class VideoFilesActivity extends AppCompatActivity implements VideoFilesA
     private void showVideoFile() {
         fileItemArrayList = fetchMedia(folder_name);
         videoFilesAdapter = new VideoFilesAdapter(this);
-        recyclerView.setAdapter(videoFilesAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,
+        binding.videoRv.setAdapter(videoFilesAdapter);
+        binding.videoRv.setLayoutManager(new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,false));
         videoFilesAdapter.notifyDataSetChanged();
     }
