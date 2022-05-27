@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">App quản lí tệp</string>
+    <string name="nav_language">Ngôn ngữ</string>
+    <string name="nav_rateus">Đánh giá</string>
+    <string name="nav_moreapp">Thêm ứng dụng</string>
+    <string name="nav_feedback">Đánh giá từ người dùng</string>
+    <string name="nav_sharaapp">Chia sẻ app</string>
+    <string name="nav_privaci">Chính sách bảo mật</string>
+    <string name="navigation_drawer_open">Mở ngăn điều hướng</string>
+    <string name="navigation_drawer_close">Đóng ngăn điều hướng</string>
+</resources>
