@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.Activity;
+package com.example.filemanagerapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -11,7 +11,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import com.example.filemanagerapp.Adapter.AudioFilesAdapter;
+import com.example.filemanagerapp.adapter.AudioFilesAdapter;
 import com.example.filemanagerapp.databinding.ActivityAudioBinding;
 import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;

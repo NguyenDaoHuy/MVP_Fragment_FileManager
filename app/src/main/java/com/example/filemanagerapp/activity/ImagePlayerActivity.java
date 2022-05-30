@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.Activity;
+package com.example.filemanagerapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.example.filemanagerapp.databinding.ActivityDetailBinding;
 import com.example.filemanagerapp.model.FileItem;

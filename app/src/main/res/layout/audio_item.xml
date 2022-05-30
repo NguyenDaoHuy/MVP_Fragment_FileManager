@@ -5,9 +5,17 @@
          <variable
              name="fileitem"
              type="com.example.filemanagerapp.model.FileItem" />
+         <variable
+             name="audiofilesactivity"
+             type="com.example.filemanagerapp.activity.AudioFilesActivity"/>
+         <variable
+             name="position"
+             type="Integer" />
+         <import type="android.view.View"/>
     </data>
 
     <RelativeLayout
+        android:onClick="@{() -> audiofilesactivity.onClickItem(position)}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"

@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.Activity;
+package com.example.filemanagerapp.activity;
 
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
@@ -11,51 +11,53 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.filemanagerapp.Adapter.ImageFilesAdapter;
-import com.example.filemanagerapp.Adapter.VideoFilesAdapter;
-import com.example.filemanagerapp.databinding.ActivityImageBinding;
+
+import com.example.filemanagerapp.adapter.VideoFilesAdapter;
+import com.example.filemanagerapp.databinding.ActivityVideoFilesBinding;
 import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ImageFilesActivity extends AppCompatActivity implements ImageFilesAdapter.ImageFilesInterface {
+public class VideoFilesActivity extends AppCompatActivity implements VideoFilesAdapter.VideoFilesInterface {
+
     private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
-    private ImageFilesAdapter imagesAdapter;
+    private VideoFilesAdapter videoFilesAdapter;
     private String folder_name;
     private BottomSheetDialog bottomSheetDialog;
-    private ActivityImageBinding binding;
+    private ActivityVideoFilesBinding binding;
 
-    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_image);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_video_files);
         folder_name = getIntent().getStringExtra("folderName");
-        imagesAdapter = new ImageFilesAdapter(this);
-        binding.lvListItem.setAdapter(imagesAdapter);
-        binding.lvListItem.setLayoutManager(new LinearLayoutManager(this,
-                RecyclerView.VERTICAL,false));
-        imagesAdapter.notifyDataSetChanged();
-        showImageFile();
+        showVideoFile();
     }
-    private void showImageFile() {
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void showVideoFile() {
         fileItemArrayList = fetchMedia(folder_name);
+        videoFilesAdapter = new VideoFilesAdapter(this);
+        binding.videoRv.setAdapter(videoFilesAdapter);
+        binding.videoRv.setLayoutManager(new LinearLayoutManager(this,
+                RecyclerView.VERTICAL,false));
+        videoFilesAdapter.notifyDataSetChanged();
     }
 
     private ArrayList<FileItem> fetchMedia(String folderName) {
         ArrayList<FileItem> fileItems = new ArrayList<>();
-        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        String selection = MediaStore.Images.Media.DATA+" like?";
+        Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+        String selection = MediaStore.Video.Media.DATA+" like?";
         String[] selectionArg = new String[]{"%"+folderName+"%"};
         @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(uri,null,
                 selection,selectionArg,null);
@@ -86,19 +88,23 @@ public class ImageFilesActivity extends AppCompatActivity implements ImageFilesA
     }
 
     @Override
-    public FileItem image(int position) {
+    public FileItem file(int position) {
         return fileItemArrayList.get(position);
     }
 
     @Override
     public void onClickItem(int position) {
-        Intent intent = new Intent(this, ImagePlayerActivity.class);
-        intent.putExtra("anh", (Serializable) fileItemArrayList.get(position));
+        Intent intent = new Intent(this, VideoPlayerActivity.class);
+        intent.putExtra("position",position);
+        intent.putExtra("video_title", fileItemArrayList.get(position).getDisplayName());
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("videoArrayList", fileItemArrayList);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
     @Override
-    public boolean onLongClickItem(int position,View v) {
+    public boolean onLongClick(int position, View v) {
         PopupMenu popupMenu = new PopupMenu(this,v);
         popupMenu.getMenu().add("OPEN");
         popupMenu.getMenu().add("DELETE");
@@ -106,35 +112,39 @@ public class ImageFilesActivity extends AppCompatActivity implements ImageFilesA
         popupMenu.getMenu().add("SHARE");
         popupMenu.setOnMenuItemClickListener(item -> {
             if(item.getTitle().equals("OPEN")){
-                Intent intent = new Intent(getApplicationContext(), ImagePlayerActivity.class);
-                intent.putExtra("anh", (Serializable) fileItemArrayList.get(position));
+                Intent intent = new Intent(getApplicationContext(), VideoPlayerActivity.class);
+                intent.putExtra("position",position);
+                intent.putExtra("video_title", fileItemArrayList.get(position).getDisplayName());
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("videoArrayList", fileItemArrayList);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
             if(item.getTitle().equals("DELETE")){
-                AlertDialog.Builder alerDialog = new AlertDialog.Builder(ImageFilesActivity.this);
+                AlertDialog.Builder alerDialog = new AlertDialog.Builder(VideoFilesActivity.this);
                 alerDialog.setTitle("Deleta");
                 alerDialog.setMessage("Do you want to delete this video ?");
                 alerDialog.setPositiveButton("Delete", (dialog, which) -> {
-                    Uri uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    Uri uri = ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                             Long.parseLong(fileItemArrayList.get(position).getId()));
                     File file = new File(fileItemArrayList.get(position).getPath());
                     boolean delete = file.delete();
                     if(delete){
                         getContentResolver().delete(uri,null,null);
                         fileItemArrayList.remove(position);
-                        imagesAdapter.notifyItemRemoved(position);
-                        imagesAdapter.notifyItemRangeChanged(position,fileItemArrayList.size());
-                        Toast.makeText(ImageFilesActivity.this,"Deleted",Toast.LENGTH_SHORT).show();
+                        videoFilesAdapter.notifyItemRemoved(position);
+                        videoFilesAdapter.notifyItemRangeChanged(position,fileItemArrayList.size());
+                        Toast.makeText(VideoFilesActivity.this,"Deleted",Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        Toast.makeText(ImageFilesActivity.this,"Can't deleted",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VideoFilesActivity.this,"Can't deleted",Toast.LENGTH_SHORT).show();
                     }
                 });
                 alerDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
                 alerDialog.show();
             }
             if(item.getTitle().equals("DETAIL")){
-                AlertDialog.Builder builder = new AlertDialog.Builder(ImageFilesActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(VideoFilesActivity.this);
                 builder.setTitle("Information");
                 FileItem file = fileItemArrayList.get(position);
                 long longTime = Long.parseLong(file.getDateAdded()) * 1000;
@@ -158,11 +168,12 @@ public class ImageFilesActivity extends AppCompatActivity implements ImageFilesA
             return true;
         });
         popupMenu.show();
-        return true;
+            return true;
     }
+
     @Override
-    public void onClickMenu(int position){
-        bottomSheetDialog = new BottomSheetDialog(ImageFilesActivity.this,R.style.BottomSheetTheme);
+    public void onMenuClick(int position) {
+        bottomSheetDialog = new BottomSheetDialog(VideoFilesActivity.this,R.style.BottomSheetTheme);
         View bsView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_layout,
                 findViewById(R.id.bottom_sheet));
         bsView.findViewById(R.id.bs_language).setOnClickListener(v -> bottomSheetDialog.dismiss());
@@ -174,4 +185,5 @@ public class ImageFilesActivity extends AppCompatActivity implements ImageFilesA
     public Context context() {
         return getApplicationContext();
     }
+
 }

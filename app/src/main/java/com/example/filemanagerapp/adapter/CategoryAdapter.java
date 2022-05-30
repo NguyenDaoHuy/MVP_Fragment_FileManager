@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.Adapter;
+package com.example.filemanagerapp.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;

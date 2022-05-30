@@ -21,31 +21,31 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.filemanagerapp.Activity.AudioFolderActivity;
-import com.example.filemanagerapp.Activity.DocumentsFileActivity;
-import com.example.filemanagerapp.Activity.ImageFolderActivity;
-import com.example.filemanagerapp.Activity.ListAppActivity;
-import com.example.filemanagerapp.Activity.NewFilesActivity;
-import com.example.filemanagerapp.Activity.VideoFolderActivity;
-import com.example.filemanagerapp.Adapter.CategoryAdapter;
+import com.example.filemanagerapp.activity.AudioFolderActivity;
+import com.example.filemanagerapp.activity.DocumentsFileFragment;
+import com.example.filemanagerapp.activity.ImageFolderActivity;
+import com.example.filemanagerapp.activity.ListAppActivity;
+import com.example.filemanagerapp.activity.NewFilesActivity;
+import com.example.filemanagerapp.activity.VideoFolderActivity;
+import com.example.filemanagerapp.adapter.CategoryAdapter;
+import com.example.filemanagerapp.databinding.ActivityMainBinding;
 import com.example.filemanagerapp.model.Category;
 import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.model.Item;
-import com.example.filemanagerapp.databinding.ActivityMainBinding;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class    MainActivity extends AppCompatActivity implements CategoryAdapter.CategoryInterFace {
+public class  MainActivity extends AppCompatActivity implements CategoryAdapter.CategoryInterFace {
     private static final int STORAGE_PERMISSION = 100;
     private static final String TAG = "PERMISSON_TAG";
     private ArrayList<Category> categoryArrayList;
@@ -75,10 +75,8 @@ public class    MainActivity extends AppCompatActivity implements CategoryAdapte
                             +"Click on Permission"+"\n"+"Allow access for storage")
                     .setPositiveButton("Open Settings", (dialog, which) -> requestPermission()).create().show();
         }
-
-        Toolbar toolbar = findViewById(R.id.toolBar);
-        setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        setSupportActionBar(binding.toolBar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolBar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         binding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -213,11 +211,11 @@ public class    MainActivity extends AppCompatActivity implements CategoryAdapte
             intent.putExtras(bundle);
             this.startActivity(intent);
         }else if(id == 4){
-            Intent intent = new Intent(this, DocumentsFileActivity.class);
+            Intent intent = new Intent(this, DocumentsFileFragment.class);
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList("folderDocumentsList",itemDocumentsArrayList);
             intent.putExtras(bundle);
-            this.startActivity(intent);
+            getFragment(DocumentsFileFragment.newInstance());
         }else if(id == 5){
             Intent intent = new Intent(this, ListAppActivity.class);
             this.startActivity(intent);
@@ -340,5 +338,10 @@ public class    MainActivity extends AppCompatActivity implements CategoryAdapte
             }while (cursor.moveToNext());
 
         }
+    }
+    private  void getFragment(Fragment fragment){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentMain,fragment)
+                .commit();
     }
 }

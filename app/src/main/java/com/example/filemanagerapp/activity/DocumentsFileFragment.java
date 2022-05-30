@@ -1,37 +1,55 @@
-package com.example.filemanagerapp.Activity;
+package com.example.filemanagerapp.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import com.example.filemanagerapp.Adapter.DocumentsFilesAdapter;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import com.example.filemanagerapp.adapter.DocumentsFilesAdapter;
 import com.example.filemanagerapp.databinding.ActivityDocumentsFileBinding;
 import com.example.filemanagerapp.model.Item;
 import com.example.filemanagerapp.R;
 import java.io.File;
 import java.util.ArrayList;
 
-public class DocumentsFileActivity extends AppCompatActivity implements DocumentsFilesAdapter.DocumentFileInterface {
-    ArrayList<Item> folderDocumentsList;
+public class DocumentsFileFragment extends Fragment implements DocumentsFilesAdapter.DocumentFileInterface {
+    private ArrayList<Item> folderDocumentsList;
     private ActivityDocumentsFileBinding binding;
+    private View view;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_documents_file);
-        folderDocumentsList = getIntent().getExtras().getParcelableArrayList("folderDocumentsList");
-        showDocuments();
+
+    public static DocumentsFileFragment newInstance() {
+        Bundle args = new Bundle();
+        DocumentsFileFragment fragment = new DocumentsFileFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater,R.layout.activity_documents_file,container,false);
+        view = binding.getRoot();
+     //   folderDocumentsList = getIntent().getExtras().getParcelableArrayList("folderDocumentsList");
+        folderDocumentsList = (ArrayList<Item>) getArguments().getSerializable("folderDocumentsList");
+        showDocuments();
+        return view;
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private void showDocuments(){
         DocumentsFilesAdapter adapter = new DocumentsFilesAdapter(this);
         binding.rvDocuments.setAdapter(adapter);
-        binding.rvDocuments.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
+        binding.rvDocuments.setLayoutManager(new LinearLayoutManager(view.getContext(),RecyclerView.VERTICAL,false));
         adapter.notifyDataSetChanged();
     }
 
@@ -58,7 +76,7 @@ public class DocumentsFileActivity extends AppCompatActivity implements Document
         File file = new File(folderDocumentsList.get(position).getPath());
         String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
         String mimetype = android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-        Uri photoURI = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
+        Uri photoURI = FileProvider.getUriForFile(view.getContext(), view.getContext().getPackageName() + ".provider", file);
         if (extension.equalsIgnoreCase("") || mimetype == null) {
             intent.setDataAndType(photoURI, "text/*");
         } else {

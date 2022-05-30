@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.Activity;
+package com.example.filemanagerapp.activity;
 
 import android.media.MediaPlayer;
 

@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.Activity;
+package com.example.filemanagerapp.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -9,7 +9,7 @@ import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.filemanagerapp.Adapter.DocumentsFilesAdapter;
+import com.example.filemanagerapp.adapter.DocumentsFilesAdapter;
 import com.example.filemanagerapp.databinding.ActivityNewFilesBinding;
 import com.example.filemanagerapp.model.Item;
 import com.example.filemanagerapp.R;
