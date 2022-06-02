@@ -7,14 +7,37 @@
 
        </data>
 
-       <RelativeLayout
+       <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="match_parent"
-           tools:context=".activity.ListAppActivity">
+           tools:context=".activity.ListAppFragment"
+           android:orientation="vertical"
+           android:background="@color/white">
+              <RelativeLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="50dp"
+                  android:background="#DC53A6">
+
+                     <ImageView
+                         android:id="@+id/btnBack"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_centerVertical="true"
+                         android:layout_marginLeft="12dp"
+                         android:src="@drawable/ic_back" />
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:text="App"
+                         android:textColor="@color/white"
+                         android:textSize="18dp"
+                         android:textStyle="bold"
+                         android:layout_centerInParent="true"/>
+              </RelativeLayout>
 
               <ListView
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:id="@+id/lvApp" />
-       </RelativeLayout>
+       </LinearLayout>
 </layout>

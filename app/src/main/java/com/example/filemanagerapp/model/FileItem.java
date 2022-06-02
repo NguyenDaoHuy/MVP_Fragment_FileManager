@@ -5,12 +5,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.databinding.BindingAdapter;
-
 import com.bumptech.glide.Glide;
-import com.example.filemanagerapp.activity.AudioPlayerActivity;
-
+import com.example.filemanagerapp.activity.AudioPlayerFragment;
 import java.io.File;
 import java.io.Serializable;
 
@@ -143,6 +140,6 @@ public class FileItem implements Serializable, Parcelable {
     }
     @BindingAdapter("android:loadAudioTime")
     public static void loadAudioTime(TextView tvTimeAudio, String duration){
-        tvTimeAudio.setText(AudioPlayerActivity.convertToMMSS(duration));
+        tvTimeAudio.setText(AudioPlayerFragment.convertToMMSS(duration));
     }
 }

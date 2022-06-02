@@ -1,38 +1,50 @@
 package com.example.filemanagerapp.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-
+import androidx.fragment.app.Fragment;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
+import com.example.filemanagerapp.MainActivity;
 import com.example.filemanagerapp.databinding.ActivityDetailBinding;
 import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Date;
 
-public class ImagePlayerActivity extends AppCompatActivity {
+public class ImagePlayerFragment extends Fragment {
 
-    ActivityDetailBinding binding;
+    private ActivityDetailBinding binding;
+    private View view;
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_detail);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater,R.layout.activity_detail,container,false);
+        view = binding.getRoot();
         getDataImage();
         binding.btnScreenshot.setOnClickListener(v -> {
-            takeScreenshot();
+          //  takeScreenshot();
         });
         shareButton();
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(view.getContext(), MainActivity.class);
+                startActivity(intent);
+//                getActivity().onBackPressed();
+
+            }
+        });
+        return view;
     }
+
     private void getDataImage(){
-        FileItem fileDevices = (FileItem) getIntent().getSerializableExtra("anh");
+        FileItem fileDevices = (FileItem) getArguments().getSerializable("anh");
         String str = fileDevices.getPath();
         binding.imgView.setImageBitmap(BitmapFactory.decodeFile(str));
     }
@@ -47,7 +59,7 @@ public class ImagePlayerActivity extends AppCompatActivity {
              startActivity(Intent.createChooser(intent,"Share using "));
         });
     }
-    @SuppressWarnings("deprecation")
+ /*    @SuppressWarnings("deprecation")
     private void takeScreenshot() {
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
@@ -82,5 +94,5 @@ public class ImagePlayerActivity extends AppCompatActivity {
         Uri uri = Uri.fromFile(imageFile);
         intent.setDataAndType(uri, "image/*");
         startActivity(intent);
-    }
+    } */
 }

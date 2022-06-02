@@ -3,11 +3,14 @@ package com.example.filemanagerapp.activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 
 import com.example.filemanagerapp.databinding.ActivityVideoPlayerBinding;
 import com.example.filemanagerapp.model.FileItem;
@@ -25,30 +28,39 @@ import com.google.android.exoplayer2.util.Util;
 import java.io.File;
 import java.util.ArrayList;
 
-public class VideoPlayerActivity extends AppCompatActivity {
+public class VideoPlayerFragment extends Fragment {
 
     private SimpleExoPlayer player;
     private int position;
     private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
     private final MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();
     private ActivityVideoPlayerBinding binding;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_video_player);
-        position = getIntent().getIntExtra("position",1);
-        fileItemArrayList = getIntent().getExtras().getParcelableArrayList("videoArrayList");
+    private View view;
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater,R.layout.activity_video_player,container,false);
+        view = binding.getRoot();
+        position = getArguments().getInt("position");
+        fileItemArrayList = getArguments().getParcelableArrayList("videoArrayList");
         playerVideo();
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        return view;
     }
 
     private void playerVideo() {
         mediaPlayer.reset();
         String path = fileItemArrayList.get(position).getPath();
         Uri uri = Uri.parse(path);
-        player = new SimpleExoPlayer.Builder(this).build();
+        player = new SimpleExoPlayer.Builder(getContext()).build();
         DefaultDataSourceFactory defaultDataSourceFactory = new DefaultDataSourceFactory(
-                this, Util.getUserAgent(this,"app"));
+                getContext(), Util.getUserAgent(getContext(),"app"));
         ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource();
         for(int i = 0; i< fileItemArrayList.size(); i++){
             new File(String.valueOf(fileItemArrayList.get(i)));
@@ -67,7 +79,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
         player.addListener(new Player.EventListener(){
             @Override
             public void onPlayerError(@NonNull ExoPlaybackException error) {
-                Toast.makeText(VideoPlayerActivity.this,"Video Playing Error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Video Playing Error",Toast.LENGTH_SHORT).show();
             }
         });
         player.setPlayWhenReady(true);

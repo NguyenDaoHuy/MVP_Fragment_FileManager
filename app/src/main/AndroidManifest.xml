@@ -26,17 +26,6 @@
         </activity>
         <activity android:name=".SplashActivity" >
         </activity>
-        <activity android:name=".activity.NewFilesActivity" />
-        <activity android:name=".activity.ListAppActivity" />
-        <activity android:name=".activity.AudioPlayerActivity" />
-        <activity android:name=".activity.AudioFolderActivity" />
-        <activity android:name=".activity.ImageFilesActivity" />
-        <activity android:name=".activity.ImageFolderActivity" />
-        <activity android:name=".activity.VideoPlayerActivity" />
-        <activity android:name=".activity.VideoFilesActivity" />
-        <activity android:name=".activity.VideoFolderActivity" />
-        <activity android:name=".activity.ImagePlayerActivity" />
-        <activity android:name=".activity.AudioFilesActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

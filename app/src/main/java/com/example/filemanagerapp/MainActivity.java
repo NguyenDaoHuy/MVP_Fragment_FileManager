@@ -1,62 +1,45 @@
 package com.example.filemanagerapp;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.filemanagerapp.activity.AudioFolderActivity;
+import com.example.filemanagerapp.activity.AudioFolderFragment;
 import com.example.filemanagerapp.activity.DocumentsFileFragment;
-import com.example.filemanagerapp.activity.ImageFolderActivity;
-import com.example.filemanagerapp.activity.ListAppActivity;
-import com.example.filemanagerapp.activity.NewFilesActivity;
-import com.example.filemanagerapp.activity.VideoFolderActivity;
+import com.example.filemanagerapp.activity.ImageFolderFragment;
+import com.example.filemanagerapp.activity.ListAppFragment;
+import com.example.filemanagerapp.activity.NewFilesFragment;
+import com.example.filemanagerapp.activity.VideoFolderFragment;
 import com.example.filemanagerapp.adapter.CategoryAdapter;
 import com.example.filemanagerapp.databinding.ActivityMainBinding;
 import com.example.filemanagerapp.model.Category;
-import com.example.filemanagerapp.model.FileItem;
-import com.example.filemanagerapp.model.Item;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class  MainActivity extends AppCompatActivity implements CategoryAdapter.CategoryInterFace {
     private static final int STORAGE_PERMISSION = 100;
     private static final String TAG = "PERMISSON_TAG";
     private ArrayList<Category> categoryArrayList;
-    private final ArrayList<Item> itemDocumentsArrayList = new ArrayList<>();
-    private final ArrayList<Item> itemNewFileArrayList = new ArrayList<>();
-    private final ArrayList<FileItem> itemImageArrayList = new ArrayList<>();
-    private final ArrayList<String> imageFolderList = new ArrayList<>();
-    private final ArrayList<FileItem> itemVideoArrayList = new ArrayList<>();
-    private final ArrayList<String> videoFolderList = new ArrayList<>();
-    private final ArrayList<FileItem> itemAudioArrayList = new ArrayList<>();
-    private final ArrayList<String> audioFolderList = new ArrayList<>();
     private final Activity mActivity = MainActivity.this;
     private ActivityMainBinding binding;
     @Override
@@ -75,24 +58,13 @@ public class  MainActivity extends AppCompatActivity implements CategoryAdapter.
                             +"Click on Permission"+"\n"+"Allow access for storage")
                     .setPositiveButton("Open Settings", (dialog, which) -> requestPermission()).create().show();
         }
-        setSupportActionBar(binding.toolBar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolBar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
-        binding.drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
-        File dir = new File(String.valueOf(Environment.getExternalStorageDirectory()));
-        walkdir(dir);
-        getFolderImage();
-        getFolderAudio();
-        getFolderVideo();
-
         categoryArrayList = new ArrayList<>();
-        categoryArrayList.add(new Category(1,"Images",R.drawable.icons_image,imageFolderList.size()));
-        categoryArrayList.add(new Category(2,"Audio",R.drawable.icons_new_files,audioFolderList.size()));
-        categoryArrayList.add(new Category(3,"Videos",R.drawable.icons_video,videoFolderList.size()));
-        categoryArrayList.add(new Category(4,"Documents",R.drawable.icons8_documents,itemDocumentsArrayList.size()));
+        categoryArrayList.add(new Category(1,"Images",R.drawable.icons_image,10));
+        categoryArrayList.add(new Category(2,"Audio",R.drawable.icons_new_files,10));
+        categoryArrayList.add(new Category(3,"Videos",R.drawable.icons_video,10));
+        categoryArrayList.add(new Category(4,"Documents",R.drawable.icons8_documents,10));
         categoryArrayList.add(new Category(5,"Apps",R.drawable.icons_android,120));
-        categoryArrayList.add(new Category(6,"New files",R.drawable.icon_file,itemNewFileArrayList.size()));
+        categoryArrayList.add(new Category(6,"New files",R.drawable.icon_file,10));
         categoryArrayList.add(new Category(7,"Cloud",R.drawable.icons_cloud,120));
         categoryArrayList.add(new Category(8,"Remote",R.drawable.icons8_remote,120));
         categoryArrayList.add(new Category(9,"Access device",R.drawable.icons_remote,120));
@@ -193,38 +165,17 @@ public class  MainActivity extends AppCompatActivity implements CategoryAdapter.
         Category category = categoryArrayList.get(position);
         int id = category.getId();
         if(id == 1){
-            Intent intent = new Intent(this, ImageFolderActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putStringArrayList("folderImageList", imageFolderList);
-            intent.putExtras(bundle);
-            this.startActivity(intent);
+            getFragment(new ImageFolderFragment());
         }else if(id == 2){
-            Intent intent = new Intent(this, AudioFolderActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putStringArrayList("folderAudioList", audioFolderList);
-            intent.putExtras(bundle);
-            this.startActivity(intent);
+            getFragment(new AudioFolderFragment());
         }else if(id == 3){
-            Intent intent = new Intent(this, VideoFolderActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putStringArrayList("folderVideoList", videoFolderList);
-            intent.putExtras(bundle);
-            this.startActivity(intent);
+            getFragment(new VideoFolderFragment());
         }else if(id == 4){
-            Intent intent = new Intent(this, DocumentsFileFragment.class);
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("folderDocumentsList",itemDocumentsArrayList);
-            intent.putExtras(bundle);
-            getFragment(DocumentsFileFragment.newInstance());
+            getFragment(new DocumentsFileFragment());
         }else if(id == 5){
-            Intent intent = new Intent(this, ListAppActivity.class);
-            this.startActivity(intent);
+            getFragment(new ListAppFragment());
         }else if(id == 6){
-            Intent intent = new Intent(this, NewFilesActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("folderNewFilesList",itemNewFileArrayList);
-            intent.putExtras(bundle);
-            this.startActivity(intent);
+            getFragment(new NewFilesFragment());
         }else if(id == 7){
             Toast.makeText(this,"Not data",Toast.LENGTH_SHORT).show();
         }else if(id == 8){
@@ -233,115 +184,19 @@ public class  MainActivity extends AppCompatActivity implements CategoryAdapter.
             Toast.makeText(this,"Not data",Toast.LENGTH_SHORT).show();
         }
     }
-    public void walkdir(File dir) {
-        File[] listFile = dir.listFiles();
-        int monthNow = Calendar.getInstance().get(Calendar.MONTH) +1;
-        int yearNow = Calendar.getInstance().get(Calendar.YEAR);
-        try{
-            if (listFile.length > 0) {
-                for (File file : listFile) {
-                    if (file.isDirectory()) {
-                        walkdir(file);
-                    } else {
-                        String name = file.getName();
-                        String path = file.getPath();
-                        Date date = new Date(file.lastModified());
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(date);
-                        int month = cal.get(Calendar.MONTH) + 1;
-                        int year = cal.get(Calendar.YEAR);
-
-                        if (file.getName().endsWith(".docx") ||
-                                file.getName().endsWith(".pdf") ||
-                                file.getName().endsWith(".txt") ||
-                                file.getName().endsWith(".pptx") ||
-                                file.getName().endsWith(".xls")) {
-                            if (month == monthNow && year == yearNow) {
-                                itemNewFileArrayList.add(new Item(name, path));
-                            }
-                            itemDocumentsArrayList.add(new Item(name, path));
-                            System.out.println(date);
-                        }
-                    }
-                }
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+    public void getFragment(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentMain,fragment);
+        fragmentTransaction.commit();
     }
-    public void getFolderImage(){
-        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(uri,null,null,null,null);
-        if(cursor != null && cursor.moveToNext()){
-            do{
-                String id = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media._ID));
-                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.TITLE));
-                String displayName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
-                String size = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.SIZE));
-                String duration = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DURATION));
-                String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                String dateAdded = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED));
-                FileItem fileItem = new FileItem(id,title,displayName,size,duration,path,dateAdded);
 
-                int index = path.lastIndexOf("/");
-                String subString = path.substring(0,index);
-                if(!imageFolderList.contains(subString)){
-                    imageFolderList.add(subString);
-                }
-                itemImageArrayList.add(fileItem);
-            }while (cursor.moveToNext());
-        }
-    }
-    public void getFolderAudio(){
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(uri,null,null,null,null);
-        if(cursor != null && cursor.moveToNext()){
-            do{
-                String id = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
-                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                String displayName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
-                String size = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
-                String duration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                String dateAdded = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_ADDED));
-                FileItem fileItem = new FileItem(id,title,displayName,size,duration,path,dateAdded);
-
-                int index = path.lastIndexOf("/");
-                String subString = path.substring(0,index);
-                if(!audioFolderList.contains(subString)){
-                    audioFolderList.add(subString);
-                }
-                itemAudioArrayList.add(fileItem);
-            }while (cursor.moveToNext());
-        }
-    }
-    public void getFolderVideo(){
-        Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-        @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(uri,null,null,null,null);
-        if(cursor != null && cursor.moveToNext()){
-            do{
-                String id = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media._ID));
-                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.TITLE));
-                String displayName = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME));
-                String size = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.SIZE));
-                String duration = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DURATION));
-                String path = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATA));
-                String dateAdded = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATE_ADDED));
-                FileItem fileItem = new FileItem(id,title,displayName,size,duration,path,dateAdded);
-
-                int index = path.lastIndexOf("/");
-                String subString = path.substring(0,index);
-                if(!videoFolderList.contains(subString)){
-                    videoFolderList.add(subString);
-                }
-                itemVideoArrayList.add(fileItem);
-            }while (cursor.moveToNext());
-
-        }
-    }
-    private  void getFragment(Fragment fragment){
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentMain,fragment)
-                .commit();
-    }
+//    @Override
+//    public void sendData(String nameOFFolder) {
+//        ImageFilesFragment imageFilesFragment = (ImageFilesFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentMain2);
+//        imageFilesFragment.receiveDataFromFragment(nameOFFolder);
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.fragmentMain2,imageFilesFragment);
+//        fragmentTransaction.commit();
+//    }
 }

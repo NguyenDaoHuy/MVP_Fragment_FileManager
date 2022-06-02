@@ -9,10 +9,33 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.AudioPlayerActivity"
+        tools:context=".activity.AudioPlayerFragment"
         android:background="@color/black">
+        <RelativeLayout
+            android:id="@+id/tooBarPlayerAudio"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#DC53A6">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="12dp"
+                android:src="@drawable/ic_back" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Audio"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
 
         <TextView
+            android:layout_below="@+id/tooBarPlayerAudio"
             android:id="@+id/audioName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

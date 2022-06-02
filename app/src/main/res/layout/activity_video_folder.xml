@@ -11,24 +11,34 @@
          android:layout_width="match_parent"
          android:layout_height="match_parent"
          android:orientation="vertical"
-         tools:context=".activity.VideoFolderActivity">
+         tools:context=".activity.VideoFolderFragment"
+         android:background="@color/white">
+          <RelativeLayout
+              android:layout_width="match_parent"
+              android:layout_height="50dp"
+              android:background="#DC53A6">
+
+               <ImageView
+                   android:id="@+id/btnBack"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_centerVertical="true"
+                   android:layout_marginLeft="12dp"
+                   android:src="@drawable/ic_back" />
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Video"
+                   android:textColor="@color/white"
+                   android:textSize="18dp"
+                   android:textStyle="bold"
+                   android:layout_centerInParent="true"/>
+          </RelativeLayout>
 
           <androidx.recyclerview.widget.RecyclerView
               android:id="@+id/lvFolderVideo"
               android:layout_width="match_parent"
               android:layout_height="wrap_content" />
 
-          <RelativeLayout
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:id="@+id/tvThongBao"
-                   android:layout_centerInParent="true"
-                   android:textSize="20dp"
-                   android:textColor="@color/black" />
-          </RelativeLayout>
      </LinearLayout>
 </layout>

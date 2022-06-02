@@ -4,11 +4,14 @@ import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.SeekBar;
-
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-
+import androidx.fragment.app.Fragment;
 import com.example.filemanagerapp.databinding.ActivityAudioPlayerBinding;
 import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
@@ -16,42 +19,50 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class AudioPlayerActivity extends AppCompatActivity {
-
+public class AudioPlayerFragment extends Fragment {
 
     private ArrayList<FileItem> audioArrayList;
     private FileItem audio;
     private final MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();
     private ActivityAudioPlayerBinding binding;
+    private View view;
+    private int position;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_audio_player);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater,R.layout.activity_audio_player,container,false);
+        view = binding.getRoot();
         binding.audioName.setSelected(true);
-
-        audioArrayList = (ArrayList<FileItem>) getIntent().getSerializableExtra("LIST");
+        position = getArguments().getInt("position");
+        audioArrayList = getArguments().getParcelableArrayList("LIST");
         setResourcesWithMusic();
-        AudioPlayerActivity.this.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                 if(mediaPlayer != null){
-                     binding.seekBar.setProgress(mediaPlayer.getCurrentPosition());
-                     binding.currentTime.setText(convertToMMSS(mediaPlayer.getCurrentPosition()+""));
-                     if(mediaPlayer.isPlaying()){
-                         binding.pausePlay.setImageResource(R.drawable.exo_icon_pause);
-                     }else {
-                         binding.pausePlay.setImageResource(R.drawable.ic_play);
-                     }
-                 }
-                 new Handler().postDelayed(this,100);
+                if(mediaPlayer != null){
+                    binding.seekBar.setProgress(mediaPlayer.getCurrentPosition());
+                    binding.currentTime.setText(convertToMMSS(mediaPlayer.getCurrentPosition()+""));
+                    if(mediaPlayer.isPlaying()){
+                        binding.pausePlay.setImageResource(R.drawable.exo_icon_pause);
+                    }else {
+                        binding.pausePlay.setImageResource(R.drawable.ic_play);
+                    }
+                }
+                new Handler().postDelayed(this,100);
+            }
+        });
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
         binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if(mediaPlayer != null && fromUser){
-                     mediaPlayer.seekTo(progress);
+                    mediaPlayer.seekTo(progress);
                 }
             }
 
@@ -65,10 +76,12 @@ public class AudioPlayerActivity extends AppCompatActivity {
 
             }
         });
+        return view;
     }
 
+
     private void setResourcesWithMusic() {
-        audio = audioArrayList.get(MyMediaPlayer.currentIndex);
+        audio = audioArrayList.get(position);
         binding.audioName.setText(audio.getDisplayName());
         binding.totalTime.setText(convertToMMSS(audio.getDuration()));
         playMusic();
