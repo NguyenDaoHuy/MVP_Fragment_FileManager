@@ -29,7 +29,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class VideoPlayerFragment extends Fragment {
-
+    public static final String TAG = VideoPlayerFragment.class.getName();
     private SimpleExoPlayer player;
     private int position;
     private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
@@ -48,7 +48,9 @@ public class VideoPlayerFragment extends Fragment {
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(getFragmentManager() != null){
+                    getFragmentManager().popBackStack();
+                }
             }
         });
         return view;

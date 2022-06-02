@@ -33,7 +33,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class VideoFilesFragment extends Fragment implements VideoFilesAdapter.VideoFilesInterface {
-
+    public static final String TAG = VideoFilesFragment.class.getName();
     private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
     private VideoFilesAdapter videoFilesAdapter;
     private String folder_name;
@@ -52,11 +52,9 @@ public class VideoFilesFragment extends Fragment implements VideoFilesAdapter.Vi
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VideoFolderFragment videoFolderFragment = new VideoFolderFragment();
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.fragmentMain, videoFolderFragment);
-                ft.addToBackStack(null);
-                ft.commit();
+                if(getFragmentManager() != null){
+                    getFragmentManager().popBackStack();
+                }
             }
         });
         return view;
@@ -119,7 +117,10 @@ public class VideoFilesFragment extends Fragment implements VideoFilesAdapter.Vi
         bundle.putString("video_title", fileItemArrayList.get(position).getDisplayName());
         bundle.putParcelableArrayList("videoArrayList", fileItemArrayList);
         videoPlayerFragment.setArguments(bundle);
-        getFragmentManager().beginTransaction().add(R.id.fragmentMain, videoPlayerFragment).commit();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentMain, videoPlayerFragment);
+        fragmentTransaction.addToBackStack(VideoPlayerFragment.TAG);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -192,12 +193,12 @@ public class VideoFilesFragment extends Fragment implements VideoFilesAdapter.Vi
 
     @Override
     public void onMenuClick(int position) {
-//        bottomSheetDialog = new BottomSheetDialog(VideoFilesFragment.this,R.style.BottomSheetTheme);
-//        View bsView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_layout,
-//                findViewById(R.id.bottom_sheet));
-//        bsView.findViewById(R.id.bs_language).setOnClickListener(v -> bottomSheetDialog.dismiss());
-//        bottomSheetDialog.setContentView(bsView);
-//        bottomSheetDialog.show();
+        bottomSheetDialog = new BottomSheetDialog(getContext(),R.style.BottomSheetTheme);
+        View bsView = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout,
+                getActivity().findViewById(R.id.bottom_sheet));
+        bsView.findViewById(R.id.bs_language).setOnClickListener(v -> bottomSheetDialog.dismiss());
+        bottomSheetDialog.setContentView(bsView);
+        bottomSheetDialog.show();
     }
 
     @Override

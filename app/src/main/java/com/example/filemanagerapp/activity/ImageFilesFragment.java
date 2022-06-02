@@ -33,6 +33,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ImageFilesFragment extends Fragment implements ImageFilesAdapter.ImageFilesInterface {
+    public static final String TAG = ImageFilesFragment.class.getName();
     private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
     private ImageFilesAdapter imagesAdapter;
     private String folder_name = "";
@@ -56,11 +57,9 @@ public class ImageFilesFragment extends Fragment implements ImageFilesAdapter.Im
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageFolderFragment imageFolderFragment = new ImageFolderFragment();
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.fragmentMain, imageFolderFragment);
-                ft.addToBackStack(null);
-                ft.commit();
+                if(getFragmentManager() != null){
+                    getFragmentManager().popBackStack();
+                }
             }
         });
         return view;
@@ -115,7 +114,10 @@ public class ImageFilesFragment extends Fragment implements ImageFilesAdapter.Im
         Bundle bundle = new Bundle();
         bundle.putSerializable("anh",fileItemArrayList.get(position));
         imagePlayerFragment.setArguments(bundle);
-        getFragmentManager().beginTransaction().add(R.id.fragmentMain, imagePlayerFragment).commit();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentMain, imagePlayerFragment);
+        fragmentTransaction.addToBackStack(ImagePlayerFragment.TAG);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -183,20 +185,16 @@ public class ImageFilesFragment extends Fragment implements ImageFilesAdapter.Im
     }
     @Override
     public void onClickMenu(int position){
-//        bottomSheetDialog = new BottomSheetDialog(getContext(),R.style.BottomSheetTheme);
-//        View bsView = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout,
-//                findViewById(R.id.bottom_sheet));
-//        bsView.findViewById(R.id.bs_language).setOnClickListener(v -> bottomSheetDialog.dismiss());
-//        bottomSheetDialog.setContentView(bsView);
-//        bottomSheetDialog.show();
+        bottomSheetDialog = new BottomSheetDialog(getContext(),R.style.BottomSheetTheme);
+        View bsView = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout,
+                getActivity().findViewById(R.id.bottom_sheet));
+        bsView.findViewById(R.id.bs_language).setOnClickListener(v -> bottomSheetDialog.dismiss());
+        bottomSheetDialog.setContentView(bsView);
+        bottomSheetDialog.show();
     }
 
     @Override
     public Context context() {
         return getContext();
-    }
-
-    public void receiveDataFromFragment(String nameOFFolder){
-     //      folder_name = nameOFFolder;
     }
 }

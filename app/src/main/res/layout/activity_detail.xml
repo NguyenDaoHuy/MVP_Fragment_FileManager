@@ -37,14 +37,14 @@
         </RelativeLayout>
 
         <ImageView
-            android:layout_below="@+id/toolBarPlayerImage"
+            android:id="@+id/imgView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="30dp"
+            android:layout_below="@+id/toolBarPlayerImage"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="100dp"
-            android:id="@+id/imgView" />
+            android:layout_marginBottom="100dp" />
 
         <LinearLayout
             android:layout_above="@+id/toolBarPlayerImage"

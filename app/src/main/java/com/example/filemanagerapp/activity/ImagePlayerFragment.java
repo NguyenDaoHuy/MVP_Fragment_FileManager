@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.example.filemanagerapp.MainActivity;
 import com.example.filemanagerapp.databinding.ActivityDetailBinding;
 import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
@@ -20,7 +18,7 @@ public class ImagePlayerFragment extends Fragment {
 
     private ActivityDetailBinding binding;
     private View view;
-
+    public static final String TAG = ImagePlayerFragment.class.getName();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,10 +32,9 @@ public class ImagePlayerFragment extends Fragment {
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(view.getContext(), MainActivity.class);
-                startActivity(intent);
-//                getActivity().onBackPressed();
-
+                if(getFragmentManager() != null){
+                    getFragmentManager().popBackStack();
+                }
             }
         });
         return view;

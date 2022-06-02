@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -77,7 +78,10 @@ public class VideoFolderFragment extends Fragment implements FolderRecyclerViewA
         Bundle bundle = new Bundle();
         bundle.putString("nameOFFolder",nameOFFolder);
         videoFilesFragment.setArguments(bundle);
-        getFragmentManager().beginTransaction().add(R.id.fragmentMain, videoFilesFragment).commit();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentMain, videoFilesFragment);
+        fragmentTransaction.addToBackStack(VideoFilesFragment.TAG);
+        fragmentTransaction.commit();
     }
     public void getFolderVideo(){
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;

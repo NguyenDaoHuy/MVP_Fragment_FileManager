@@ -17,23 +17,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.filemanagerapp.adapter.AudioFilesAdapter;
-import com.example.filemanagerapp.databinding.ActivityAudioBinding;
 import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
 import java.util.ArrayList;
 
 public class AudioFilesActivity extends Fragment implements AudioFilesAdapter.AudioFileInterface {
-
+    public static final String TAG = AudioFilesActivity.class.getName();
     private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
     private String folder_name;
-    private ActivityAudioBinding binding;
-    private View view;
 
+    @SuppressLint("NotifyDataSetChanged")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater,R.layout.activity_audio,container,false);
-        view = binding.getRoot();
+        com.example.filemanagerapp.databinding.ActivityAudioBinding binding = DataBindingUtil.inflate(inflater, R.layout.activity_audio, container, false);
+        View view = binding.getRoot();
         folder_name = getArguments().getString("nameOFFolder");
         showVideoFile();
         binding.tvAudioFolder.setText(folder_name);
@@ -42,14 +40,9 @@ public class AudioFilesActivity extends Fragment implements AudioFilesAdapter.Au
         binding.audioRv.setLayoutManager(new LinearLayoutManager(getContext(),
                 RecyclerView.VERTICAL,false));
         audioFilesAdapter.notifyDataSetChanged();
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AudioFolderFragment audioFolderFragment = new AudioFolderFragment();
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.fragmentMain, audioFolderFragment);
-                ft.addToBackStack(null);
-                ft.commit();
+        binding.btnBack.setOnClickListener(v -> {
+            if(getFragmentManager() != null){
+                getFragmentManager().popBackStack();
             }
         });
         return view;
@@ -83,13 +76,6 @@ public class AudioFilesActivity extends Fragment implements AudioFilesAdapter.Au
         }
         return fileItems;
     }
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        if(binding.audioRv!=null){
-//            binding.audioRv.setAdapter(new AudioFilesAdapter(this));
-//        }
-//    }
 
     @Override
     public int getCount() {
@@ -108,19 +94,15 @@ public class AudioFilesActivity extends Fragment implements AudioFilesAdapter.Au
 
     @Override
     public void onClickItem(int position) {
-//        MyMediaPlayer.getInstance().reset();
-//        MyMediaPlayer.currentIndex = position;
-//        Intent intent = new Intent(getContext(), AudioPlayerFragment.class);
-//        intent.putExtra("LIST",fileItemArrayList);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(intent);
-
         AudioPlayerFragment audioPlayerFragment = new AudioPlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("position",position);
         bundle.putParcelableArrayList("LIST",fileItemArrayList);
         audioPlayerFragment.setArguments(bundle);
-        getFragmentManager().beginTransaction().add(R.id.fragmentMain, audioPlayerFragment).commit();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentMain, audioPlayerFragment);
+        fragmentTransaction.addToBackStack(AudioPlayerFragment.TAG);
+        fragmentTransaction.commit();
     }
 
     @Override

@@ -24,7 +24,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class DocumentsFileFragment extends Fragment implements DocumentsFilesAdapter.DocumentFileInterface {
-    private ArrayList<Item> itemDocumentsArrayList = new ArrayList<>();
+    private final ArrayList<Item> itemDocumentsArrayList = new ArrayList<>();
     private ActivityDocumentsFileBinding binding;
     private View view;
     public DocumentsFileFragment(){
@@ -39,12 +39,9 @@ public class DocumentsFileFragment extends Fragment implements DocumentsFilesAda
         File dir = new File(String.valueOf(Environment.getExternalStorageDirectory()));
         walkdir(dir);
         showDocuments();
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(view.getContext(), MainActivity.class);
-                startActivity(intent);
-            }
+        binding.btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(view.getContext(), MainActivity.class);
+            startActivity(intent);
         });
         return view;
     }
@@ -59,11 +56,7 @@ public class DocumentsFileFragment extends Fragment implements DocumentsFilesAda
 
     @Override
     public int getCount() {
-        if(itemDocumentsArrayList == null){
-            return 0;
-        } else {
-            itemDocumentsArrayList.size();
-        }
+        itemDocumentsArrayList.size();
         return itemDocumentsArrayList.size();
     }
 

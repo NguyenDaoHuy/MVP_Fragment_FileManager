@@ -20,19 +20,18 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class AudioPlayerFragment extends Fragment {
-
+    public static final String TAG = AudioPlayerFragment.class.getName();
     private ArrayList<FileItem> audioArrayList;
     private FileItem audio;
     private final MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();
     private ActivityAudioPlayerBinding binding;
-    private View view;
     private int position;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,R.layout.activity_audio_player,container,false);
-        view = binding.getRoot();
+        View view = binding.getRoot();
         binding.audioName.setSelected(true);
         position = getArguments().getInt("position");
         audioArrayList = getArguments().getParcelableArrayList("LIST");
@@ -52,10 +51,9 @@ public class AudioPlayerFragment extends Fragment {
                 new Handler().postDelayed(this,100);
             }
         });
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+        binding.btnBack.setOnClickListener(v -> {
+            if(getFragmentManager() != null){
+                getFragmentManager().popBackStack();
             }
         });
         binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

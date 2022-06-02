@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.provider.MediaStore;
@@ -70,7 +71,10 @@ public class ImageFolderFragment extends Fragment implements FolderRecyclerViewA
         Bundle bundle = new Bundle();
         bundle.putString("nameOFFolder",nameOFFolder);
         imageFilesFragment.setArguments(bundle);
-        getFragmentManager().beginTransaction().add(R.id.fragmentMain, imageFilesFragment).commit();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentMain, imageFilesFragment);
+        fragmentTransaction.addToBackStack(ImageFilesFragment.TAG);
+        fragmentTransaction.commit();
     }
     public void getFolderImage(){
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
