@@ -1,5 +1,6 @@
 package com.example.filemanagerapp.activity;
 
+import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -21,11 +22,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.filemanagerapp.R;
 import com.example.filemanagerapp.adapter.ImageFilesAdapter;
 import com.example.filemanagerapp.adapter.VideoFilesAdapter;
-import com.example.filemanagerapp.databinding.ActivityImageBinding;
 import com.example.filemanagerapp.model.FileItem;
-import com.example.filemanagerapp.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.File;
@@ -38,14 +39,13 @@ public class ImageFilesFragment extends Fragment implements ImageFilesAdapter.Im
     private ImageFilesAdapter imagesAdapter;
     private String folder_name = "";
     private BottomSheetDialog bottomSheetDialog;
-    private ActivityImageBinding binding;
-    private View view;
 
+    @SuppressLint("NotifyDataSetChanged")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater,R.layout.activity_image,container,false);
-        view = binding.getRoot();
+        com.example.filemanagerapp.databinding.ActivityImageBinding binding = DataBindingUtil.inflate(inflater, R.layout.activity_image, container, false);
+        View view = binding.getRoot();
         folder_name = getArguments().getString("nameOFFolder");
         showImageFile();
         imagesAdapter = new ImageFilesAdapter(this);
@@ -54,12 +54,9 @@ public class ImageFilesFragment extends Fragment implements ImageFilesAdapter.Im
         binding.lvListItem.setLayoutManager(new LinearLayoutManager(getContext(),
                 RecyclerView.VERTICAL,false));
         imagesAdapter.notifyDataSetChanged();
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(getFragmentManager() != null){
-                    getFragmentManager().popBackStack();
-                }
+        binding.btnBack.setOnClickListener(v -> {
+            if(getFragmentManager() != null){
+                getFragmentManager().popBackStack();
             }
         });
         return view;
@@ -75,7 +72,7 @@ public class ImageFilesFragment extends Fragment implements ImageFilesAdapter.Im
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         String selection = MediaStore.Images.Media.DATA+" like?";
         String[] selectionArg = new String[]{"%"+folderName+"%"};
-        Cursor cursor = getActivity().getContentResolver().query(uri,null,
+        @SuppressLint("Recycle") Cursor cursor = getActivity().getContentResolver().query(uri,null,
                 selection,selectionArg,null);
         if(cursor!=null && cursor.moveToNext()){
             do{
@@ -129,9 +126,14 @@ public class ImageFilesFragment extends Fragment implements ImageFilesAdapter.Im
         popupMenu.getMenu().add("SHARE");
         popupMenu.setOnMenuItemClickListener(item -> {
             if(item.getTitle().equals("OPEN")){
-                Intent intent = new Intent(this.getContext(), ImagePlayerFragment.class);
-                intent.putExtra("anh", (Serializable) fileItemArrayList.get(position));
-                startActivity(intent);
+                ImagePlayerFragment imagePlayerFragment = new ImagePlayerFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("anh",fileItemArrayList.get(position));
+                imagePlayerFragment.setArguments(bundle);
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentMain, imagePlayerFragment);
+                fragmentTransaction.addToBackStack(ImagePlayerFragment.TAG);
+                fragmentTransaction.commit();
             }
             if(item.getTitle().equals("DELETE")){
                 AlertDialog.Builder alerDialog = new AlertDialog.Builder(getContext());

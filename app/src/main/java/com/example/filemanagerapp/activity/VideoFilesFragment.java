@@ -23,10 +23,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.filemanagerapp.R;
 import com.example.filemanagerapp.adapter.VideoFilesAdapter;
 import com.example.filemanagerapp.databinding.ActivityVideoFilesBinding;
 import com.example.filemanagerapp.model.FileItem;
-import com.example.filemanagerapp.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.File;
@@ -39,22 +39,18 @@ public class VideoFilesFragment extends Fragment implements VideoFilesAdapter.Vi
     private String folder_name;
     private BottomSheetDialog bottomSheetDialog;
     private ActivityVideoFilesBinding binding;
-    private View view;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,R.layout.activity_video_files,container,false);
-        view = binding.getRoot();
+        View view = binding.getRoot();
         folder_name = getArguments().getString("nameOFFolder");
         showVideoFile();
         binding.tvVideoFolder.setText(folder_name);
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(getFragmentManager() != null){
-                    getFragmentManager().popBackStack();
-                }
+        binding.btnBack.setOnClickListener(v -> {
+            if(getFragmentManager() != null){
+                getFragmentManager().popBackStack();
             }
         });
         return view;
@@ -132,13 +128,16 @@ public class VideoFilesFragment extends Fragment implements VideoFilesAdapter.Vi
         popupMenu.getMenu().add("SHARE");
         popupMenu.setOnMenuItemClickListener(item -> {
             if(item.getTitle().equals("OPEN")){
-                Intent intent = new Intent(getContext(), VideoPlayerFragment.class);
-                intent.putExtra("position",position);
-                intent.putExtra("video_title", fileItemArrayList.get(position).getDisplayName());
+                VideoPlayerFragment videoPlayerFragment = new VideoPlayerFragment();
                 Bundle bundle = new Bundle();
+                bundle.putInt("position",position);
+                bundle.putString("video_title", fileItemArrayList.get(position).getDisplayName());
                 bundle.putParcelableArrayList("videoArrayList", fileItemArrayList);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                videoPlayerFragment.setArguments(bundle);
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentMain, videoPlayerFragment);
+                fragmentTransaction.addToBackStack(VideoPlayerFragment.TAG);
+                fragmentTransaction.commit();
             }
             if(item.getTitle().equals("DELETE")){
                 AlertDialog.Builder alerDialog = new AlertDialog.Builder(getContext());
@@ -195,7 +194,7 @@ public class VideoFilesFragment extends Fragment implements VideoFilesAdapter.Vi
     public void onMenuClick(int position) {
         bottomSheetDialog = new BottomSheetDialog(getContext(),R.style.BottomSheetTheme);
         View bsView = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout,
-                getActivity().findViewById(R.id.bottom_sheet));
+                requireActivity().findViewById(R.id.bottom_sheet));
         bsView.findViewById(R.id.bs_language).setOnClickListener(v -> bottomSheetDialog.dismiss());
         bottomSheetDialog.setContentView(bsView);
         bottomSheetDialog.show();

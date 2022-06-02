@@ -1,5 +1,6 @@
 package com.example.filemanagerapp.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
@@ -14,11 +16,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.filemanagerapp.MainActivity;
-import com.example.filemanagerapp.adapter.DocumentsFilesAdapter;
-import com.example.filemanagerapp.databinding.ActivityNewFilesBinding;
-import com.example.filemanagerapp.model.Item;
 import com.example.filemanagerapp.R;
+import com.example.filemanagerapp.adapter.DocumentsFilesAdapter;
+import com.example.filemanagerapp.model.Item;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,15 +30,15 @@ import java.util.Date;
 
 public class NewFilesFragment extends Fragment implements DocumentsFilesAdapter.DocumentFileInterface {
 
-    private ArrayList<Item> itemNewFileArrayList = new ArrayList<>();
-    private ActivityNewFilesBinding binding;
+    private final ArrayList<Item> itemNewFileArrayList = new ArrayList<>();
     private View view;
 
     public NewFilesFragment(){}
+    @SuppressLint("NotifyDataSetChanged")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater,R.layout.activity_new_files,container,false);
+        com.example.filemanagerapp.databinding.ActivityNewFilesBinding binding = DataBindingUtil.inflate(inflater, R.layout.activity_new_files, container, false);
         view = binding.getRoot();
         File dir = new File(String.valueOf(Environment.getExternalStorageDirectory()));
         walkdir(dir);
@@ -43,12 +46,9 @@ public class NewFilesFragment extends Fragment implements DocumentsFilesAdapter.
         binding.rvNewFile.setAdapter(adapter);
         binding.rvNewFile.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
         adapter.notifyDataSetChanged();
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(view.getContext(), MainActivity.class);
-                startActivity(intent);
-            }
+        binding.btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(view.getContext(), MainActivity.class);
+            startActivity(intent);
         });
         return view;
     }

@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.filemanagerapp.activity.AudioFolderFragment;
 import com.example.filemanagerapp.activity.DocumentsFileFragment;
 import com.example.filemanagerapp.activity.ImageFolderFragment;
@@ -31,7 +33,6 @@ import com.example.filemanagerapp.activity.ListAppFragment;
 import com.example.filemanagerapp.activity.NewFilesFragment;
 import com.example.filemanagerapp.activity.VideoFolderFragment;
 import com.example.filemanagerapp.adapter.CategoryAdapter;
-import com.example.filemanagerapp.databinding.ActivityMainBinding;
 import com.example.filemanagerapp.model.Category;
 
 import java.util.ArrayList;
@@ -41,11 +42,11 @@ public class  MainActivity extends AppCompatActivity implements CategoryAdapter.
     private static final String TAG = "PERMISSON_TAG";
     private ArrayList<Category> categoryArrayList;
     private final Activity mActivity = MainActivity.this;
-    private ActivityMainBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
+        com.example.filemanagerapp.databinding.ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         if(checkPermission()){
 
@@ -191,12 +192,4 @@ public class  MainActivity extends AppCompatActivity implements CategoryAdapter.
         fragmentTransaction.commit();
     }
 
-//    @Override
-//    public void sendData(String nameOFFolder) {
-//        ImageFilesFragment imageFilesFragment = (ImageFilesFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentMain2);
-//        imageFilesFragment.receiveDataFromFragment(nameOFFolder);
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.fragmentMain2,imageFilesFragment);
-//        fragmentTransaction.commit();
-//    }
 }

@@ -13,7 +13,7 @@ import com.example.filemanagerapp.databinding.ItemDanhMucBinding;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHoder> {
 
-    private final CategoryInterFace categoryInterFace;;
+    private final CategoryInterFace categoryInterFace;
 
     public CategoryAdapter(CategoryInterFace categoryInterFace) {
         this.categoryInterFace = categoryInterFace;
@@ -40,7 +40,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         return categoryInterFace.getCount();
     }
 
-    public class ViewHoder extends RecyclerView.ViewHolder{
+    public static class ViewHoder extends RecyclerView.ViewHolder{
            ItemDanhMucBinding itemDanhMucBinding;
            public ViewHoder(@NonNull ItemDanhMucBinding itemDanhMucBinding){
                 super(itemDanhMucBinding.getRoot());

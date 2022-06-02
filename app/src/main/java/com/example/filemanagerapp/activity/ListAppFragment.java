@@ -31,12 +31,9 @@ public class ListAppFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater,R.layout.activity_list_app,container,false);
         view = binding.getRoot();
         InstalledApps();
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(view.getContext(), MainActivity.class);
-                startActivity(intent);
-            }
+        binding.btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(view.getContext(), MainActivity.class);
+            startActivity(intent);
         });
         return view;
     }

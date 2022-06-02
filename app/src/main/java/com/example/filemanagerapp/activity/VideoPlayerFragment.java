@@ -35,22 +35,18 @@ public class VideoPlayerFragment extends Fragment {
     private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
     private final MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();
     private ActivityVideoPlayerBinding binding;
-    private View view;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,R.layout.activity_video_player,container,false);
-        view = binding.getRoot();
+        View view = binding.getRoot();
         position = getArguments().getInt("position");
         fileItemArrayList = getArguments().getParcelableArrayList("videoArrayList");
         playerVideo();
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(getFragmentManager() != null){
-                    getFragmentManager().popBackStack();
-                }
+        binding.btnBack.setOnClickListener(v -> {
+            if(getFragmentManager() != null){
+                getFragmentManager().popBackStack();
             }
         });
         return view;
