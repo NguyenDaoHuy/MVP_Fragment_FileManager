@@ -11,7 +11,6 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -25,14 +24,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.filemanagerapp.activity.AudioFolderFragment;
-import com.example.filemanagerapp.activity.DocumentsFileFragment;
-import com.example.filemanagerapp.activity.ImageFolderFragment;
-import com.example.filemanagerapp.activity.ListAppFragment;
-import com.example.filemanagerapp.activity.NewFilesFragment;
-import com.example.filemanagerapp.activity.VideoFolderFragment;
+import com.example.filemanagerapp.audio.AudioFolderFragment;
+import com.example.filemanagerapp.documents.DocumentsFileFragment;
+import com.example.filemanagerapp.image.ImageFolderFragment;
+import com.example.filemanagerapp.documents.ListAppFragment;
+import com.example.filemanagerapp.documents.NewFilesFragment;
+import com.example.filemanagerapp.video.VideoFolderFragment;
 import com.example.filemanagerapp.adapter.CategoryAdapter;
+import com.example.filemanagerapp.databinding.ActivityMainBinding;
 import com.example.filemanagerapp.model.Category;
 
 import java.util.ArrayList;
@@ -42,38 +41,45 @@ public class  MainActivity extends AppCompatActivity implements CategoryAdapter.
     private static final String TAG = "PERMISSON_TAG";
     private ArrayList<Category> categoryArrayList;
     private final Activity mActivity = MainActivity.this;
-
+    private ActivityMainBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        com.example.filemanagerapp.databinding.ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
-        if(checkPermission()){
-
-        }else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("App Permission")
-                    .setMessage("You must allow this aoo to access files on your device"
-                            +"\n\n"+"Now follow the below steps"+"\n\n"+
-                            "Open Settings from below button"+"\n"
-                            +"Click on Permission"+"\n"+"Allow access for storage")
-                    .setPositiveButton("Open Settings", (dialog, which) -> requestPermission()).create().show();
-        }
-        categoryArrayList = new ArrayList<>();
-        categoryArrayList.add(new Category(1,"Images",R.drawable.icons_image,10));
-        categoryArrayList.add(new Category(2,"Audio",R.drawable.icons_new_files,10));
-        categoryArrayList.add(new Category(3,"Videos",R.drawable.icons_video,10));
-        categoryArrayList.add(new Category(4,"Documents",R.drawable.icons8_documents,10));
-        categoryArrayList.add(new Category(5,"Apps",R.drawable.icons_android,120));
-        categoryArrayList.add(new Category(6,"New files",R.drawable.icon_file,10));
-        categoryArrayList.add(new Category(7,"Cloud",R.drawable.icons_cloud,120));
-        categoryArrayList.add(new Category(8,"Remote",R.drawable.icons8_remote,120));
-        categoryArrayList.add(new Category(9,"Access device",R.drawable.icons_remote,120));
-        CategoryAdapter categoryAdapter = new CategoryAdapter(this);
-        RecyclerView.LayoutManager layoutManager =new GridLayoutManager(getApplicationContext(),3,RecyclerView.VERTICAL,false);
-        binding.rvDanhMuc.setLayoutManager(layoutManager);
-        binding.rvDanhMuc.setAdapter(categoryAdapter);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        displayCaregory();
+        connectPermission();
     }
+
+      private void displayCaregory(){
+          categoryArrayList = new ArrayList<>();
+          categoryArrayList.add(new Category(1,"Images",R.drawable.icons_image,10));
+          categoryArrayList.add(new Category(2,"Audio",R.drawable.icons_new_files,10));
+          categoryArrayList.add(new Category(3,"Videos",R.drawable.icons_video,10));
+          categoryArrayList.add(new Category(4,"Documents",R.drawable.icons8_documents,10));
+          categoryArrayList.add(new Category(5,"Apps",R.drawable.icons_android,120));
+          categoryArrayList.add(new Category(6,"New files",R.drawable.icon_file,10));
+          categoryArrayList.add(new Category(7,"Cloud",R.drawable.icons_cloud,120));
+          categoryArrayList.add(new Category(8,"Remote",R.drawable.icons8_remote,120));
+          categoryArrayList.add(new Category(9,"Access device",R.drawable.icons_remote,120));
+          CategoryAdapter categoryAdapter = new CategoryAdapter(this);
+          RecyclerView.LayoutManager layoutManager =new GridLayoutManager(getApplicationContext(),3,RecyclerView.VERTICAL,false);
+          binding.rvDanhMuc.setLayoutManager(layoutManager);
+          binding.rvDanhMuc.setAdapter(categoryAdapter);
+      }
+
+      private void connectPermission(){
+          if(checkPermission()){
+
+          }else {
+              AlertDialog.Builder builder = new AlertDialog.Builder(this);
+              builder.setTitle("App Permission")
+                      .setMessage("You must allow this aoo to access files on your device"
+                              +"\n\n"+"Now follow the below steps"+"\n\n"+
+                              "Open Settings from below button"+"\n"
+                              +"Click on Permission"+"\n"+"Allow access for storage")
+                      .setPositiveButton("Open Settings", (dialog, which) -> requestPermission()).create().show();
+          }
+      }
 
       private void requestPermission(){
           if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){

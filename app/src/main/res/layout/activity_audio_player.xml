@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.AudioPlayerFragment"
+        tools:context=".audio.AudioPlayerFragment"
         android:background="@color/black">
         <RelativeLayout
             android:id="@+id/tooBarPlayerAudio"

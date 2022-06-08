@@ -1,9 +1,8 @@
-package com.example.filemanagerapp.activity;
+package com.example.filemanagerapp.audio;
 
 import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,21 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import com.example.filemanagerapp.activity.MyMediaPlayer;
 import com.example.filemanagerapp.databinding.ActivityAudioPlayerBinding;
 import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class AudioPlayerFragment extends Fragment {
+public class AudioPlayerFragment extends Fragment implements AudioContract.PlayerAudioView{
     public static final String TAG = AudioPlayerFragment.class.getName();
     private ArrayList<FileItem> audioArrayList;
-    private FileItem audio;
     private final MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();
     private ActivityAudioPlayerBinding binding;
     private int position;
-
+    private AudioPlayerPresenter audioPlayerPresenter;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,22 +33,9 @@ public class AudioPlayerFragment extends Fragment {
         binding.audioName.setSelected(true);
         position = getArguments().getInt("position");
         audioArrayList = getArguments().getParcelableArrayList("LIST");
+        audioPlayerPresenter = new AudioPlayerPresenter(this);
         setResourcesWithMusic();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(mediaPlayer != null){
-                    binding.seekBar.setProgress(mediaPlayer.getCurrentPosition());
-                    binding.currentTime.setText(convertToMMSS(mediaPlayer.getCurrentPosition()+""));
-                    if(mediaPlayer.isPlaying()){
-                        binding.pausePlay.setImageResource(R.drawable.exo_icon_pause);
-                    }else {
-                        binding.pausePlay.setImageResource(R.drawable.ic_play);
-                    }
-                }
-                new Handler().postDelayed(this,100);
-            }
-        });
+        audioPlayerPresenter.checkPlaying(getActivity(),mediaPlayer,binding.seekBar);
         binding.btnBack.setOnClickListener(v -> {
             if(getFragmentManager() != null){
                 getFragmentManager().popBackStack();
@@ -77,48 +62,33 @@ public class AudioPlayerFragment extends Fragment {
         return view;
     }
 
-
-    private void setResourcesWithMusic() {
-        audio = audioArrayList.get(position);
+    @Override
+    public void setResourcesWithMusic() {
+        FileItem audio = audioArrayList.get(position);
         binding.audioName.setText(audio.getDisplayName());
         binding.totalTime.setText(convertToMMSS(audio.getDuration()));
-        playMusic();
-        binding.next.setOnClickListener(v -> nextMusic());
-        binding.previous.setOnClickListener(v -> previousMusic());
-        binding.pausePlay.setOnClickListener(v -> pauseMusic());
+        audioPlayerPresenter.playMusic(mediaPlayer, audio,binding.seekBar);
+        binding.next.setOnClickListener(v -> audioPlayerPresenter.nextMusic(audioArrayList,mediaPlayer));
+        binding.previous.setOnClickListener(v -> audioPlayerPresenter.previousMusic(mediaPlayer));
+        binding.pausePlay.setOnClickListener(v -> audioPlayerPresenter.pauseMusic(mediaPlayer));
     }
-    private void playMusic(){
-        mediaPlayer.reset();
-        try {
-            mediaPlayer.setDataSource(audio.getPath());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-            binding.seekBar.setProgress(0);
-            binding.seekBar.setMax(mediaPlayer.getDuration());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+    @Override
+    public void setTextCurrenTime() {
+        binding.currentTime.setText(audioPlayerPresenter.convertToMMSS(mediaPlayer.getCurrentPosition()+""));
     }
-    private void nextMusic(){
-        if(MyMediaPlayer.currentIndex == audioArrayList.size()-1)
-             return;
-        MyMediaPlayer.currentIndex += 1;
-        mediaPlayer.reset();
-        setResourcesWithMusic();
+
+    @Override
+    public void setPlaying() {
+        binding.pausePlay.setImageResource(R.drawable.ic_play);
     }
-    private void previousMusic(){
-        if(MyMediaPlayer.currentIndex == 0)
-            return;
-        MyMediaPlayer.currentIndex -= 1;
-        mediaPlayer.reset();
-        setResourcesWithMusic();
+
+    @Override
+    public void setPausing() {
+        binding.pausePlay.setImageResource(R.drawable.exo_icon_pause);
     }
-    private void pauseMusic(){
-        if(mediaPlayer.isPlaying())
-            mediaPlayer.pause();
-        else
-            mediaPlayer.start();
-    }
+
+
     @SuppressLint("DefaultLocale")
     public static String convertToMMSS(String duration){
         long millis = Long.parseLong(duration);

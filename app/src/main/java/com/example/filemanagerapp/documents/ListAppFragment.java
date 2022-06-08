@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.activity;
+package com.example.filemanagerapp.documents;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

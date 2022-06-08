@@ -9,37 +9,38 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+import com.example.filemanagerapp.Interface.InterfaceContract;
 import com.example.filemanagerapp.adapter.AudioFilesAdapter;
+import com.example.filemanagerapp.audio.AudioFilesPresenter;
+import com.example.filemanagerapp.audio.AudioPlayerFragment;
 import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
-import java.util.ArrayList;
 
-public class AudioFilesActivity extends Fragment implements AudioFilesAdapter.AudioFileInterface {
+public class AudioFilesActivity extends Fragment implements AudioFilesAdapter.AudioFileInterface, InterfaceContract.setFileView {
     public static final String TAG = AudioFilesActivity.class.getName();
-    private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
-    private String folder_name;
-
+    private AudioFilesPresenter audioFilesPresenter;
     @SuppressLint("NotifyDataSetChanged")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         com.example.filemanagerapp.databinding.ActivityAudioBinding binding = DataBindingUtil.inflate(inflater, R.layout.activity_audio, container, false);
         View view = binding.getRoot();
-        folder_name = getArguments().getString("nameOFFolder");
-        showVideoFile();
+        String folder_name = getArguments().getString("nameOFFolder");
+
+        audioFilesPresenter = new AudioFilesPresenter(this, folder_name,getActivity());
+
         binding.tvAudioFolder.setText(folder_name);
         AudioFilesAdapter audioFilesAdapter = new AudioFilesAdapter(this);
         binding.audioRv.setAdapter(audioFilesAdapter);
         binding.audioRv.setLayoutManager(new LinearLayoutManager(getContext(),
                 RecyclerView.VERTICAL,false));
         audioFilesAdapter.notifyDataSetChanged();
+
         binding.btnBack.setOnClickListener(v -> {
             if(getFragmentManager() != null){
                 getFragmentManager().popBackStack();
@@ -48,48 +49,19 @@ public class AudioFilesActivity extends Fragment implements AudioFilesAdapter.Au
         return view;
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private void showVideoFile() {
-        fileItemArrayList = fetchMedia(folder_name);
-
-    }
-
-    private ArrayList<FileItem> fetchMedia(String folderName) {
-        ArrayList<FileItem> fileItems = new ArrayList<>();
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String selection = MediaStore.Audio.Media.DATA+" like?";
-        String[] selectionArg = new String[]{"%"+folderName+"%"};
-        @SuppressLint("Recycle") Cursor cursor = getActivity().getContentResolver().query(uri,null,
-                selection,selectionArg,null);
-        if(cursor!=null && cursor.moveToNext()){
-            do{
-                String id = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
-                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                String displayName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
-                String size = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
-                String duration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                String dateAdded = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED));
-                FileItem fileItem = new FileItem(id,title,displayName,size,duration,path,dateAdded);
-                fileItems.add(fileItem);
-            }while(cursor.moveToNext());
-        }
-        return fileItems;
-    }
-
     @Override
     public int getCount() {
-        if(fileItemArrayList == null){
+        if(audioFilesPresenter.getFileItemArrayList() == null){
             return 0;
         } else {
-            fileItemArrayList.size();
+            audioFilesPresenter.getFileItemArrayList().size();
         }
-        return fileItemArrayList.size();
+        return audioFilesPresenter.getFileItemArrayList().size();
     }
 
     @Override
     public FileItem audio(int position) {
-        return fileItemArrayList.get(position);
+        return audioFilesPresenter.getFileItemArrayList().get(position);
     }
 
     @Override
@@ -97,7 +69,7 @@ public class AudioFilesActivity extends Fragment implements AudioFilesAdapter.Au
         AudioPlayerFragment audioPlayerFragment = new AudioPlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("position",position);
-        bundle.putParcelableArrayList("LIST",fileItemArrayList);
+        bundle.putParcelableArrayList("LIST",audioFilesPresenter.getFileItemArrayList());
         audioPlayerFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentMain, audioPlayerFragment);
@@ -108,5 +80,15 @@ public class AudioFilesActivity extends Fragment implements AudioFilesAdapter.Au
     @Override
     public Context context() {
         return getContext();
+    }
+
+    @Override
+    public void setSuccess(String str) {
+
+    }
+
+    @Override
+    public void setError(String str) {
+        Toast.makeText(getContext(),str,Toast.LENGTH_SHORT).show();
     }
 }

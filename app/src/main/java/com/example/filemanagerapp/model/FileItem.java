@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.databinding.BindingAdapter;
 import com.bumptech.glide.Glide;
-import com.example.filemanagerapp.activity.AudioPlayerFragment;
+import com.example.filemanagerapp.audio.AudioPlayerFragment;
 import java.io.File;
 import java.io.Serializable;
 

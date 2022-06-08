@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.activity;
+package com.example.filemanagerapp.image;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +14,7 @@ import com.example.filemanagerapp.databinding.ActivityDetailBinding;
 import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
 
-public class ImagePlayerFragment extends Fragment {
+public class ImagePlayerFragment extends Fragment implements ImageContract.PlayerImageView{
 
     private ActivityDetailBinding binding;
     public static final String TAG = ImagePlayerFragment.class.getName();
@@ -35,13 +35,14 @@ public class ImagePlayerFragment extends Fragment {
         });
         return view;
     }
-
-    private void getDataImage(){
+    @Override
+    public void getDataImage(){
         FileItem fileDevices = (FileItem) getArguments().getSerializable("anh");
         String str = fileDevices.getPath();
         binding.imgView.setImageBitmap(BitmapFactory.decodeFile(str));
     }
-    private void shareButton(){
+    @Override
+    public void shareButton(){
         binding.btnShare.setOnClickListener(v -> {
              Intent intent = new Intent(Intent.ACTION_SEND);
              intent.setType("text/plain");
