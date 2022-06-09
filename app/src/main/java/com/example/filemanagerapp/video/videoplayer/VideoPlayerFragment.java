@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.video;
+package com.example.filemanagerapp.video.videoplayer;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import com.example.filemanagerapp.model.FileItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import java.util.ArrayList;
 
-public class VideoPlayerFragment extends Fragment implements VideoView.PlayerVideoView {
+public class VideoPlayerFragment extends Fragment implements IVideoPlayerView.PlayerVideoView {
     public static final String TAG = VideoPlayerFragment.class.getName();
     private SimpleExoPlayer player;
     private final MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();

@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.image;
+package com.example.filemanagerapp.image.imagefiles;
 
 import android.content.Context;
 import android.view.LayoutInflater;

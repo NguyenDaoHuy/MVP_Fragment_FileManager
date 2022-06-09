@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.image;
+package com.example.filemanagerapp.image.imagefolders;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

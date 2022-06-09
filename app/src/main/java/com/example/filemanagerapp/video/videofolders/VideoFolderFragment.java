@@ -1,5 +1,5 @@
 
-package com.example.filemanagerapp.video;
+package com.example.filemanagerapp.video.videofolders;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -20,6 +20,7 @@ import com.example.filemanagerapp.Interface.InterfaceContract;
 import com.example.filemanagerapp.MainActivity;
 import com.example.filemanagerapp.R;
 import com.example.filemanagerapp.adapter.FolderRecyclerViewAdapter;
+import com.example.filemanagerapp.video.videofiles.VideoFilesFragment;
 
 public class VideoFolderFragment extends Fragment implements FolderRecyclerViewAdapter.FolderInterface, InterfaceContract.setFileView {
 

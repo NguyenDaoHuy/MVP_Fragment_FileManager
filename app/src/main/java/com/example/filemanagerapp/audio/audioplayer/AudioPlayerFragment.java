@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.audio;
+package com.example.filemanagerapp.audio.audioplayer;
 
 import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
@@ -18,7 +18,7 @@ import com.example.filemanagerapp.R;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class AudioPlayerFragment extends Fragment implements AudioView.PlayerAudioView{
+public class AudioPlayerFragment extends Fragment implements IAudioPlayerView.PlayerAudioView{
     public static final String TAG = AudioPlayerFragment.class.getName();
     private ArrayList<FileItem> audioArrayList;
     private final MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();

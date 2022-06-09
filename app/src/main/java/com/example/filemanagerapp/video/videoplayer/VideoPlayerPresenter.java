@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.video;
+package com.example.filemanagerapp.video.videoplayer;
 
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -6,6 +6,8 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import com.example.filemanagerapp.model.FileItem;
+import com.example.filemanagerapp.video.videoplayer.IVideoPlayerPresenter;
+import com.example.filemanagerapp.video.videoplayer.IVideoPlayerView;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Player;
@@ -19,10 +21,10 @@ import com.google.android.exoplayer2.util.Util;
 import java.io.File;
 import java.util.ArrayList;
 
-public class VideoPlayerPresenter implements IVideoPresenter.PlayerVideoPresenter{
-    private VideoView.PlayerVideoView view;
+public class VideoPlayerPresenter implements IVideoPlayerPresenter.PlayerVideoPresenter{
+    private IVideoPlayerView.PlayerVideoView view;
 
-    public VideoPlayerPresenter(VideoView.PlayerVideoView view) {
+    public VideoPlayerPresenter(IVideoPlayerView.PlayerVideoView view) {
         this.view = view;
     }
 

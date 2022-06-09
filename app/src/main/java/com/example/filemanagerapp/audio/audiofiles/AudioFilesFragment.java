@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.activity;
+package com.example.filemanagerapp.audio.audiofiles;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,14 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.example.filemanagerapp.Interface.InterfaceContract;
-import com.example.filemanagerapp.audio.AudioFilesAdapter;
-import com.example.filemanagerapp.audio.AudioFilesPresenter;
-import com.example.filemanagerapp.audio.AudioPlayerFragment;
+import com.example.filemanagerapp.audio.audioplayer.AudioPlayerFragment;
 import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
 
-public class AudioFilesActivity extends Fragment implements AudioFilesAdapter.AudioFileInterface, InterfaceContract.setFileView {
-    public static final String TAG = AudioFilesActivity.class.getName();
+public class AudioFilesFragment extends Fragment implements AudioFilesAdapter.AudioFileInterface, InterfaceContract.setFileView {
+    public static final String TAG = AudioFilesFragment.class.getName();
     private AudioFilesPresenter audioFilesPresenter;
     @SuppressLint("NotifyDataSetChanged")
     @Nullable

@@ -1,30 +1,31 @@
-package com.example.filemanagerapp.image;
+package com.example.filemanagerapp.video.videofiles;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+
 import com.example.filemanagerapp.Interface.InterfaceContract;
 import com.example.filemanagerapp.model.FileItem;
+
 import java.util.ArrayList;
 
-public class ImageFilesPresenter
-{
+public class VideoFilesPresenter {
+
     private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
     private final InterfaceContract.setFileView view;
 
-    public ImageFilesPresenter(String folderName, Activity activity, InterfaceContract.setFileView view) {
+    public VideoFilesPresenter(String folderName, Activity activity, InterfaceContract.setFileView view) {
         this.view = view;
         init(folderName,activity);
     }
-
     private void init(String folderName,Activity activity){
         fileItemArrayList = fetchMedia(folderName,activity);
         if(fileItemArrayList!=null){
 
         }else {
-           view.setError("Không có dữ liệu ảnh");
+            view.setError("Không có dữ liệu video");
         }
     }
 
@@ -32,10 +33,10 @@ public class ImageFilesPresenter
         return fileItemArrayList;
     }
 
-    private ArrayList<FileItem> fetchMedia(String folderName,Activity activity) {
+    private ArrayList<FileItem> fetchMedia(String folderName, Activity activity) {
         ArrayList<FileItem> fileItems = new ArrayList<>();
-        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        String selection = MediaStore.Images.Media.DATA+" like?";
+        Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+        String selection = MediaStore.Video.Media.DATA+" like?";
         String[] selectionArg = new String[]{"%"+folderName+"%"};
         @SuppressLint("Recycle") Cursor cursor = activity.getContentResolver().query(uri,null,
                 selection,selectionArg,null);
@@ -54,5 +55,4 @@ public class ImageFilesPresenter
         }
         return fileItems;
     }
-
 }

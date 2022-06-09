@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.audio;
+package com.example.filemanagerapp.audio.audioplayer;
 
 import android.app.Activity;
 import android.media.MediaPlayer;
@@ -10,11 +10,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class AudioPlayerPresenter implements IAudioPresenter.PlayerAudioPresenter {
+public class AudioPlayerPresenter implements IAudioPlayerPresenter.PlayerAudioPresenter {
 
-    private AudioView.PlayerAudioView view;
+    private IAudioPlayerView.PlayerAudioView view;
 
-    public AudioPlayerPresenter(AudioView.PlayerAudioView view) {
+    public AudioPlayerPresenter(IAudioPlayerView.PlayerAudioView view) {
         this.view = view;
     }
 

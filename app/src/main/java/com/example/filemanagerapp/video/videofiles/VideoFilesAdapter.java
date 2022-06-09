@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.video;
+package com.example.filemanagerapp.video.videofiles;
 
 import android.content.Context;
 import android.view.LayoutInflater;

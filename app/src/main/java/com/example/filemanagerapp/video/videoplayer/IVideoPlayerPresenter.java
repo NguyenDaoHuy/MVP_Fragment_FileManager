@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.video;
+package com.example.filemanagerapp.video.videoplayer;
 
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -9,7 +9,7 @@ import com.google.android.exoplayer2.ui.PlayerView;
 
 import java.util.ArrayList;
 
-public interface IVideoPresenter {
+public interface IVideoPlayerPresenter {
 
     interface PlayerVideoPresenter{
         void playerVideo(MediaPlayer mediaPlayer, ArrayList<FileItem> fileItemArrayList, int position, SimpleExoPlayer player, Context context, PlayerView playerView);

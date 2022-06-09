@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.audio;
+package com.example.filemanagerapp.audio.audioplayer;
 
 import android.app.Activity;
 import android.media.MediaPlayer;
@@ -8,7 +8,7 @@ import com.example.filemanagerapp.model.FileItem;
 
 import java.util.ArrayList;
 
-public interface IAudioPresenter {
+public interface IAudioPlayerPresenter {
     interface PlayerAudioPresenter{
         void playMusic(MediaPlayer mediaPlayer, FileItem audio, SeekBar seek_bar);
         void nextMusic(ArrayList<FileItem> audioArrayList, MediaPlayer mediaPlayer);

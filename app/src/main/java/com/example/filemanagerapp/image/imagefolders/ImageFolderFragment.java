@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.image;
+package com.example.filemanagerapp.image.imagefolders;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import com.example.filemanagerapp.Interface.InterfaceContract;
 import com.example.filemanagerapp.MainActivity;
 import com.example.filemanagerapp.R;
 import com.example.filemanagerapp.adapter.FolderRecyclerViewAdapter;
+import com.example.filemanagerapp.image.imagefiles.ImageFilesFragment;
 
 public class ImageFolderFragment extends Fragment implements FolderRecyclerViewAdapter.FolderInterface, InterfaceContract.setFileView {
     private View view;

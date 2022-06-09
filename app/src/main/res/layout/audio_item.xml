@@ -7,7 +7,7 @@
              type="com.example.filemanagerapp.model.FileItem" />
          <variable
              name="audiofilesactivity"
-             type="com.example.filemanagerapp.activity.AudioFilesActivity"/>
+             type="com.example.filemanagerapp.audio.audiofiles.AudioFilesFragment"/>
          <variable
              name="position"
              type="Integer" />

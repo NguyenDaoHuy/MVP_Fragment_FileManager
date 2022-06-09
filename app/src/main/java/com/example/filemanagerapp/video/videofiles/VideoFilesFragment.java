@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.image;
+package com.example.filemanagerapp.video.videofiles;
 
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -20,70 +21,75 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.filemanagerapp.Interface.InterfaceContract;
 import com.example.filemanagerapp.R;
-import com.example.filemanagerapp.video.VideoFilesAdapter;
 import com.example.filemanagerapp.model.FileItem;
+import com.example.filemanagerapp.video.videoplayer.VideoPlayerFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 import java.io.File;
 
-public class ImageFilesFragment extends Fragment implements ImageFilesAdapter.ImageFilesInterface, InterfaceContract.setFileView {
-    public static final String TAG = ImageFilesFragment.class.getName();
-    private ImageFilesAdapter imagesAdapter;
+public class VideoFilesFragment extends Fragment implements VideoFilesAdapter.VideoFilesInterface, InterfaceContract.setFileView {
+    public static final String TAG = VideoFilesFragment.class.getName();
+
+    private VideoFilesAdapter videoFilesAdapter;
     private BottomSheetDialog bottomSheetDialog;
-    private ImageFilesPresenter imageFilesPresenter;
+    private VideoFilesPresenter videoFilesPresenter;
+
     @SuppressLint("NotifyDataSetChanged")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        com.example.filemanagerapp.databinding.ActivityImageBinding binding = DataBindingUtil.inflate(inflater, R.layout.activity_image, container, false);
+        com.example.filemanagerapp.databinding.ActivityVideoFilesBinding binding = DataBindingUtil.inflate(inflater, R.layout.activity_video_files, container, false);
         View view = binding.getRoot();
         String folder_name = getArguments().getString("nameOFFolder");
-        imageFilesPresenter = new ImageFilesPresenter(folder_name,getActivity(),this);
-        imagesAdapter = new ImageFilesAdapter(this);
-        binding.tvImageFolder.setText(folder_name);
-        binding.lvListItem.setAdapter(imagesAdapter);
-        binding.lvListItem.setLayoutManager(new LinearLayoutManager(getContext(),
-                RecyclerView.VERTICAL,false));
-        imagesAdapter.notifyDataSetChanged();
+        videoFilesPresenter = new VideoFilesPresenter(folder_name,getActivity(),this);
+        binding.tvVideoFolder.setText(folder_name);
         binding.btnBack.setOnClickListener(v -> {
             if(getFragmentManager() != null){
                 getFragmentManager().popBackStack();
             }
         });
+        videoFilesAdapter = new VideoFilesAdapter(this);
+        binding.videoRv.setAdapter(videoFilesAdapter);
+        binding.videoRv.setLayoutManager(new LinearLayoutManager(getContext(),
+                RecyclerView.VERTICAL,false));
+        videoFilesAdapter.notifyDataSetChanged();
         return view;
     }
 
-
     @Override
     public int getCount() {
-        if(imageFilesPresenter.getFileItemArrayList() == null){
+        if(videoFilesPresenter.getFileItemArrayList() == null){
             return 0;
         } else {
-            imageFilesPresenter.getFileItemArrayList().size();
+            videoFilesPresenter.getFileItemArrayList() .size();
         }
-        return imageFilesPresenter.getFileItemArrayList().size();
+        return videoFilesPresenter.getFileItemArrayList() .size();
     }
 
     @Override
-    public FileItem image(int position) {
-        return imageFilesPresenter.getFileItemArrayList().get(position);
+    public FileItem file(int position) {
+        return videoFilesPresenter.getFileItemArrayList() .get(position);
     }
 
     @Override
     public void onClickItem(int position) {
-        ImagePlayerFragment imagePlayerFragment = new ImagePlayerFragment();
+        VideoPlayerFragment videoPlayerFragment = new VideoPlayerFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("anh",imageFilesPresenter.getFileItemArrayList().get(position));
-        imagePlayerFragment.setArguments(bundle);
+        bundle.putInt("position",position);
+        bundle.putString("video_title", videoFilesPresenter.getFileItemArrayList() .get(position).getDisplayName());
+        bundle.putParcelableArrayList("videoArrayList", videoFilesPresenter.getFileItemArrayList() );
+        videoPlayerFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentMain, imagePlayerFragment);
-        fragmentTransaction.addToBackStack(ImagePlayerFragment.TAG);
+        fragmentTransaction.replace(R.id.fragmentMain, videoPlayerFragment);
+        fragmentTransaction.addToBackStack(VideoPlayerFragment.TAG);
         fragmentTransaction.commit();
     }
 
     @Override
-    public boolean onLongClickItem(int position,View v) {
+    public boolean onLongClick(int position, View v) {
         PopupMenu popupMenu = new PopupMenu(getContext(),v);
         popupMenu.getMenu().add("OPEN");
         popupMenu.getMenu().add("DELETE");
@@ -91,13 +97,15 @@ public class ImageFilesFragment extends Fragment implements ImageFilesAdapter.Im
         popupMenu.getMenu().add("SHARE");
         popupMenu.setOnMenuItemClickListener(item -> {
             if(item.getTitle().equals("OPEN")){
-                ImagePlayerFragment imagePlayerFragment = new ImagePlayerFragment();
+                VideoPlayerFragment videoPlayerFragment = new VideoPlayerFragment();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("anh",imageFilesPresenter.getFileItemArrayList().get(position));
-                imagePlayerFragment.setArguments(bundle);
+                bundle.putInt("position",position);
+                bundle.putString("video_title", videoFilesPresenter.getFileItemArrayList() .get(position).getDisplayName());
+                bundle.putParcelableArrayList("videoArrayList", videoFilesPresenter.getFileItemArrayList() );
+                videoPlayerFragment.setArguments(bundle);
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentMain, imagePlayerFragment);
-                fragmentTransaction.addToBackStack(ImagePlayerFragment.TAG);
+                fragmentTransaction.replace(R.id.fragmentMain, videoPlayerFragment);
+                fragmentTransaction.addToBackStack(VideoPlayerFragment.TAG);
                 fragmentTransaction.commit();
             }
             if(item.getTitle().equals("DELETE")){
@@ -105,15 +113,15 @@ public class ImageFilesFragment extends Fragment implements ImageFilesAdapter.Im
                 alerDialog.setTitle("Deleta");
                 alerDialog.setMessage("Do you want to delete this video ?");
                 alerDialog.setPositiveButton("Delete", (dialog, which) -> {
-                    Uri uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                            Long.parseLong(imageFilesPresenter.getFileItemArrayList().get(position).getId()));
-                    File file = new File(imageFilesPresenter.getFileItemArrayList().get(position).getPath());
+                    Uri uri = ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                            Long.parseLong(videoFilesPresenter.getFileItemArrayList() .get(position).getId()));
+                    File file = new File(videoFilesPresenter.getFileItemArrayList() .get(position).getPath());
                     boolean delete = file.delete();
                     if(delete){
                         getActivity().getContentResolver().delete(uri,null,null);
-                        imageFilesPresenter.getFileItemArrayList().remove(position);
-                        imagesAdapter.notifyItemRemoved(position);
-                        imagesAdapter.notifyItemRangeChanged(position,imageFilesPresenter.getFileItemArrayList().size());
+                        videoFilesPresenter.getFileItemArrayList() .remove(position);
+                        videoFilesAdapter.notifyItemRemoved(position);
+                        videoFilesAdapter.notifyItemRangeChanged(position,videoFilesPresenter.getFileItemArrayList() .size());
                         Toast.makeText(getContext(),"Deleted",Toast.LENGTH_SHORT).show();
                     }
                     else {
@@ -126,11 +134,11 @@ public class ImageFilesFragment extends Fragment implements ImageFilesAdapter.Im
             if(item.getTitle().equals("DETAIL")){
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Information");
-                FileItem file = imageFilesPresenter.getFileItemArrayList().get(position);
+                FileItem file = videoFilesPresenter.getFileItemArrayList() .get(position);
                 long longTime = Long.parseLong(file.getDateAdded()) * 1000;
                 builder.setMessage("Name :" + file.getDisplayName() +
                         "\nSize :" + android.text.format.Formatter.formatFileSize(getContext(),
-                        Long.parseLong(imageFilesPresenter.getFileItemArrayList() .get(position).getSize())) +
+                        Long.parseLong(videoFilesPresenter.getFileItemArrayList() .get(position).getSize())) +
                         "\nDate :" + VideoFilesAdapter.convertEpouch(longTime));
                 builder.setPositiveButton("OK", (dialog, which) -> dialog.cancel());
                 AlertDialog al = builder.create();
@@ -148,13 +156,14 @@ public class ImageFilesFragment extends Fragment implements ImageFilesAdapter.Im
             return true;
         });
         popupMenu.show();
-        return true;
+            return true;
     }
+
     @Override
-    public void onClickMenu(int position){
+    public void onMenuClick(int position) {
         bottomSheetDialog = new BottomSheetDialog(getContext(),R.style.BottomSheetTheme);
         View bsView = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout,
-                getActivity().findViewById(R.id.bottom_sheet));
+                requireActivity().findViewById(R.id.bottom_sheet));
         bsView.findViewById(R.id.bs_language).setOnClickListener(v -> bottomSheetDialog.dismiss());
         bottomSheetDialog.setContentView(bsView);
         bottomSheetDialog.show();
@@ -167,11 +176,11 @@ public class ImageFilesFragment extends Fragment implements ImageFilesAdapter.Im
 
     @Override
     public void setSuccess(String str) {
-
+        Toast.makeText(getContext(),str,Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void setError(String str) {
-         Toast.makeText(getContext(),str,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(),str,Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.image;
+package com.example.filemanagerapp.image.imageplayer;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +14,7 @@ import com.example.filemanagerapp.databinding.ActivityDetailBinding;
 import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
 
-public class ImagePlayerFragment extends Fragment implements ImageView.PlayerImageView{
+public class ImagePlayerFragment extends Fragment implements IImagePlayerView.PlayerImageView{
 
     private ActivityDetailBinding binding;
     public static final String TAG = ImagePlayerFragment.class.getName();

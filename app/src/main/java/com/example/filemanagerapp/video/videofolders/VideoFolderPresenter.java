@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.video;
+package com.example.filemanagerapp.video.videofolders;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

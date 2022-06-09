@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.audio;
+package com.example.filemanagerapp.audio.audiofolder;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.filemanagerapp.Interface.InterfaceContract;
 import com.example.filemanagerapp.MainActivity;
 import com.example.filemanagerapp.R;
-import com.example.filemanagerapp.activity.AudioFilesActivity;
+import com.example.filemanagerapp.audio.audiofiles.AudioFilesFragment;
 import com.example.filemanagerapp.adapter.FolderRecyclerViewAdapter;
 
 public class AudioFolderFragment extends Fragment implements FolderRecyclerViewAdapter.FolderInterface, InterfaceContract.setFileView {
@@ -61,13 +61,13 @@ public class AudioFolderFragment extends Fragment implements FolderRecyclerViewA
     public void onClickItem(int position) {
         int indexPath = audioFolderPresenter.getFolderAudioList().get(position).lastIndexOf("/");
         String nameOFFolder = audioFolderPresenter.getFolderAudioList().get(position).substring(indexPath+1);
-        AudioFilesActivity audioFilesActivity = new AudioFilesActivity();
+        AudioFilesFragment audioFilesFragment = new AudioFilesFragment();
         Bundle bundle = new Bundle();
         bundle.putString("nameOFFolder",nameOFFolder);
-        audioFilesActivity.setArguments(bundle);
+        audioFilesFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentMain, audioFilesActivity);
-        fragmentTransaction.addToBackStack(AudioFilesActivity.TAG);
+        fragmentTransaction.replace(R.id.fragmentMain, audioFilesFragment);
+        fragmentTransaction.addToBackStack(AudioFilesFragment.TAG);
         fragmentTransaction.commit();
     }
 

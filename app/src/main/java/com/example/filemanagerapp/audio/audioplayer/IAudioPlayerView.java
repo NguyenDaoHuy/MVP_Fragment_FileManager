@@ -1,7 +1,7 @@
-package com.example.filemanagerapp.audio;
+package com.example.filemanagerapp.audio.audioplayer;
 
 
-public interface AudioView {
+public interface IAudioPlayerView {
     interface PlayerAudioView{
         void setResourcesWithMusic();
         void setTextCurrenTime();
