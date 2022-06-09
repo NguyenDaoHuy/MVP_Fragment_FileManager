@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".image.ImagePlayerFragment"
+        tools:context=".image.imageplayer.ImagePlayerFragment"
         android:orientation="vertical"
         android:background="@color/white">
         <RelativeLayout
