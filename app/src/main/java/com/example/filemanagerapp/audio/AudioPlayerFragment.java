@@ -18,7 +18,7 @@ import com.example.filemanagerapp.R;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class AudioPlayerFragment extends Fragment implements AudioContract.PlayerAudioView{
+public class AudioPlayerFragment extends Fragment implements AudioView.PlayerAudioView{
     public static final String TAG = AudioPlayerFragment.class.getName();
     private ArrayList<FileItem> audioArrayList;
     private final MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();

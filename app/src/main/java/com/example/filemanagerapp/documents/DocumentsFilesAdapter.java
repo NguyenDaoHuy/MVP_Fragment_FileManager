@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.adapter;
+package com.example.filemanagerapp.documents;
 
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;

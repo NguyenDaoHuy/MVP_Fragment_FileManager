@@ -10,11 +10,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class AudioPlayerPresenter implements AudioContract.PlayerAudioPresenter {
+public class AudioPlayerPresenter implements IAudioPresenter.PlayerAudioPresenter {
 
-    AudioContract.PlayerAudioView view;
+    private AudioView.PlayerAudioView view;
 
-    public AudioPlayerPresenter(AudioContract.PlayerAudioView view) {
+    public AudioPlayerPresenter(AudioView.PlayerAudioView view) {
         this.view = view;
     }
 

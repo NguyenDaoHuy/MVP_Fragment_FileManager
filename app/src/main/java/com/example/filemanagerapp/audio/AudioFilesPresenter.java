@@ -10,7 +10,7 @@ import com.example.filemanagerapp.model.FileItem;
 import java.util.ArrayList;
 
 public class AudioFilesPresenter {
-    InterfaceContract.setFileView view;
+    private InterfaceContract.setFileView view;
     private ArrayList<FileItem> fileItemArrayList = new ArrayList<>();
 
     public AudioFilesPresenter(InterfaceContract.setFileView view, String folderName, Activity activity) {

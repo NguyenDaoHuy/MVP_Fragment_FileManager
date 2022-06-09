@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.example.filemanagerapp.Interface.InterfaceContract;
-import com.example.filemanagerapp.adapter.AudioFilesAdapter;
+import com.example.filemanagerapp.audio.AudioFilesAdapter;
 import com.example.filemanagerapp.audio.AudioFilesPresenter;
 import com.example.filemanagerapp.audio.AudioPlayerFragment;
 import com.example.filemanagerapp.model.FileItem;

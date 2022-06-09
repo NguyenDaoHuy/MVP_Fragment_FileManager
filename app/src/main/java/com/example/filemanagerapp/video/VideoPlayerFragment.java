@@ -16,7 +16,7 @@ import com.example.filemanagerapp.model.FileItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import java.util.ArrayList;
 
-public class VideoPlayerFragment extends Fragment implements VideoContract.PlayerVideoView {
+public class VideoPlayerFragment extends Fragment implements VideoView.PlayerVideoView {
     public static final String TAG = VideoPlayerFragment.class.getName();
     private SimpleExoPlayer player;
     private final MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();

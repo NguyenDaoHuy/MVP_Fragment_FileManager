@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.filemanagerapp.Interface.InterfaceContract;
 import com.example.filemanagerapp.R;
-import com.example.filemanagerapp.adapter.VideoFilesAdapter;
 import com.example.filemanagerapp.model.FileItem;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 

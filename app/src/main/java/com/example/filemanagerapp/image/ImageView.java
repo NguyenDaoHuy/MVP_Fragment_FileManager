@@ -1,6 +1,6 @@
 package com.example.filemanagerapp.image;
 
-public interface ImageContract {
+public interface ImageView {
     interface PlayerImageView{
         void shareButton();
         void getDataImage();

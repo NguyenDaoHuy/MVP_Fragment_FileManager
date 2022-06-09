@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.filemanagerapp.MainActivity;
 import com.example.filemanagerapp.R;
-import com.example.filemanagerapp.adapter.DocumentsFilesAdapter;
 import com.example.filemanagerapp.model.Item;
 
 import java.io.File;

@@ -19,10 +19,10 @@ import com.google.android.exoplayer2.util.Util;
 import java.io.File;
 import java.util.ArrayList;
 
-public class VideoPlayerPresenter implements VideoContract.PlayerVideoPresenter {
-    VideoContract.PlayerVideoView view;
+public class VideoPlayerPresenter implements IVideoPresenter.PlayerVideoPresenter{
+    private VideoView.PlayerVideoView view;
 
-    public VideoPlayerPresenter(VideoContract.PlayerVideoView view) {
+    public VideoPlayerPresenter(VideoView.PlayerVideoView view) {
         this.view = view;
     }
 

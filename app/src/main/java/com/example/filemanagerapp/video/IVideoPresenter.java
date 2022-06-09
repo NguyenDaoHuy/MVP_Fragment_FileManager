@@ -9,10 +9,7 @@ import com.google.android.exoplayer2.ui.PlayerView;
 
 import java.util.ArrayList;
 
-public interface VideoContract {
-    interface PlayerVideoView{
-        void playErrorToast(String str);
-    }
+public interface IVideoPresenter {
 
     interface PlayerVideoPresenter{
         void playerVideo(MediaPlayer mediaPlayer, ArrayList<FileItem> fileItemArrayList, int position, SimpleExoPlayer player, Context context, PlayerView playerView);

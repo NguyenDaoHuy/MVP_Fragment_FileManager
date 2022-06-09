@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.filemanagerapp.MainActivity;
-import com.example.filemanagerapp.adapter.DocumentsFilesAdapter;
 import com.example.filemanagerapp.databinding.ActivityDocumentsFileBinding;
 import com.example.filemanagerapp.model.Item;
 import com.example.filemanagerapp.R;

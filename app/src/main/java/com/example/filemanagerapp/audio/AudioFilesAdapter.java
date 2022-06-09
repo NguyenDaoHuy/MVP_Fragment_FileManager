@@ -1,4 +1,4 @@
-package com.example.filemanagerapp.adapter;
+package com.example.filemanagerapp.audio;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -14,7 +14,7 @@ import com.example.filemanagerapp.databinding.ActivityDetailBinding;
 import com.example.filemanagerapp.model.FileItem;
 import com.example.filemanagerapp.R;
 
-public class ImagePlayerFragment extends Fragment implements ImageContract.PlayerImageView{
+public class ImagePlayerFragment extends Fragment implements ImageView.PlayerImageView{
 
     private ActivityDetailBinding binding;
     public static final String TAG = ImagePlayerFragment.class.getName();
